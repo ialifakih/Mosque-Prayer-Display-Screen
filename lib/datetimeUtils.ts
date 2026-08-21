@@ -3,16 +3,21 @@ import momentHijri from "moment-hijri"
 
 const LOCALE = process.env.LOCALE || "en"
 
+// Zanzibar/Tanzania uses East Africa Time (UTC+3) all year and has no DST.
+// Prayer data in this pilot is also expressed in Zanzibar local wall-clock time,
+// so all "now" and parsed prayer-time comparisons must use the same offset.
+const MOSQUE_UTC_OFFSET_MINUTES = 180
+
 export function dtNow(): moment.Moment {
-  return moment()
+  return moment().utcOffset(MOSQUE_UTC_OFFSET_MINUTES)
 }
 
 export function dtNowLocale(): moment.Moment {
-  return moment().locale(LOCALE)
+  return moment().utcOffset(MOSQUE_UTC_OFFSET_MINUTES).locale(LOCALE)
 }
 
 export function dtLocale(date: moment.MomentInput, format?: moment.MomentFormatSpecification, strict?: boolean): moment.Moment {
-  return moment(date, format, LOCALE, strict)
+  return moment(date, format, LOCALE, strict).utcOffset(MOSQUE_UTC_OFFSET_MINUTES, true)
 }
 
 export function dtNowLocaleCustomFormat(format: string): string {
@@ -129,7 +134,7 @@ export function dtHijriLocale(
   format?: moment.MomentFormatSpecification,
   strict?: boolean,
 ): moment.Moment {
-  return momentHijri(date, format, LOCALE, strict)
+  return momentHijri(date, format, LOCALE, strict).utcOffset(MOSQUE_UTC_OFFSET_MINUTES, true)
 }
 
 export function dtHijri(
@@ -137,11 +142,11 @@ export function dtHijri(
   format?: moment.MomentFormatSpecification,
   strict?: boolean,
 ): moment.Moment {
-  return momentHijri(date, format, strict)
+  return momentHijri(date, format, strict).utcOffset(MOSQUE_UTC_OFFSET_MINUTES, true)
 }
 
 export function dtHijriNow(): moment.Moment {
-  return momentHijri().locale(LOCALE)
+  return momentHijri().utcOffset(MOSQUE_UTC_OFFSET_MINUTES).locale(LOCALE)
 }
 
 export function dtHijriNowLocaleCustomFormat(format: string): string {
