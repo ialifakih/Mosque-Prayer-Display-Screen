@@ -15,27 +15,27 @@ export default function PrayerTimes({
 }) {
   const PrayerTimesArray = [
     {
-      label: "Fajr",
+      label: "Fajr الفجر",
       data: today.fajr,
       tomorrow: tomorrow.fajr,
     },
     {
-      label: "Zuhr",
+      label: "Dhuhr الظهر",
       data: today.zuhr,
       tomorrow: tomorrow.zuhr,
     },
     {
-      label: "Asr",
+      label: "Asr العصر",
       data: today.asr,
       tomorrow: tomorrow.asr,
     },
     {
-      label: "Maghrib",
+      label: "Maghrib المغرب",
       data: today.maghrib,
       tomorrow: tomorrow.maghrib,
     },
     {
-      label: "Isha",
+      label: "Isha العشاء",
       data: today.isha,
       tomorrow: tomorrow.isha,
     },
@@ -62,9 +62,9 @@ export default function PrayerTimes({
           [&>th]:border-t-0 [&>th:last-of-type]:border-r-0"
         >
           <th className="sr-only">Prayer time</th>
-          <th className="md:text-5xl">Begins</th>
-          <th className="md:text-5xl">Jama&apos;ah</th>
-          {isTomorrowEnabled && <th className={"md:text-5xl"}>Tomorrow</th>}
+          <th className="md:text-5xl">Mwanzo</th>
+          <th className="md:text-5xl">Jamaa</th>
+          {isTomorrowEnabled && <th className={"md:text-5xl"}>Kesho</th>}
         </tr>
       </thead>
       <tbody>

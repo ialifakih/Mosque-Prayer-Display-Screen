@@ -15,7 +15,7 @@ export default function SunriseJummahTiles({
       } text-center gap-0 md:gap-3`}
     >
       <div className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto">
-        <dt className="text-sm lg:text-2xl font-medium">Sunrise</dt>
+        <dt className="text-sm lg:text-2xl font-medium">Kuchomoza Jua</dt>
         <dd className="mt-1 text-xl lg:text-5xl font-bold tracking-tight">
           {dtFormatTimeTo12h(sunrise)}
         </dd>
@@ -27,7 +27,7 @@ export default function SunriseJummahTiles({
           key={index}
         >
           <dt className="text-sm lg:text-2xl font-medium">
-            {jummahTime.label}
+            {jummahTime.label.replace(/Jummah/i, "Swala ya Ijumaa")}
           </dt>
           <dd className="mt-1 text-xl lg:text-5xl font-bold tracking-tight">
             {dtFormatTimeTo12h(jummahTime.time)}
