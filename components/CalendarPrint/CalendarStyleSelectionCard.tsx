@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CalendarPrintComponentProps } from "@/types/CalendarPrintType"
 import { calendarPrintStyles } from "./PrintStyles/CalendarPrintStyles"
+import { dtNowLocale } from "@/lib/datetimeUtils"
 
 
 
@@ -13,7 +14,7 @@ export default function CalendarStyleSelectionCard({ calendarId, data }: { calen
 
   const calendarDisplayName = calendarPrintStyle?.display_name
   const calendarDescription = calendarPrintStyle?.description
-  const nextYear = new Date().getFullYear() + 1
+  const nextYear = dtNowLocale().year() + 1
 
   const futureYears = [nextYear, nextYear + 1]
 

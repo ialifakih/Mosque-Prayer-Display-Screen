@@ -38,6 +38,7 @@ import {
   dtHijriFormatDateMonthYearLong,
   dtNowHijriFormatFull,
   dtFormatTimeTo12h,
+  MOSQUE_TIME_ZONE,
 } from "./datetimeUtils" // <- change this
 
 describe("date utils (moment + moment-hijri)", () => {
@@ -70,6 +71,7 @@ describe("date utils (moment + moment-hijri)", () => {
       expect(moment.isMoment(m)).toBe(true)
       expect(m.toISOString()).toBe(FIXED_ISO)
       expect(m.locale()).toBe("en")
+      expect(m.tz()).toBe(MOSQUE_TIME_ZONE)
     })
 
     test("dtLocale parses ISO date when given an ISO string", () => {
@@ -85,16 +87,16 @@ describe("date utils (moment + moment-hijri)", () => {
 
   describe("time formatting", () => {
     test("dtNowLocalFormatTime24Hour -> HH:mm", () => {
-      expect(dtNowLocalFormatTime24Hour()).toBe("06:57")
+      expect(dtNowLocalFormatTime24Hour()).toBe("09:57")
     })
 
     test("dtNowLocalFormatTime12Hour -> h:mm (no am/pm)", () => {
-      expect(dtNowLocalFormatTime12Hour()).toBe("6:57")
+      expect(dtNowLocalFormatTime12Hour()).toBe("9:57")
     })
 
     test("dtNowLocaleFormatTime12hAmPm -> h:mm A", () => {
       // moment uses uppercase AM/PM for "A"
-      expect(dtNowLocaleFormatTime12hAmPm()).toBe("6:57 AM")
+      expect(dtNowLocaleFormatTime12hAmPm()).toBe("9:57 AM")
     })
 
     test("dtFormatTimeTo12h -> h:mm", () => {
@@ -114,6 +116,23 @@ describe("date utils (moment + moment-hijri)", () => {
       const out = dtFormatTimeTo12hAmPm("18:05")
       // Could be "6:05 pm" in most environments; assert a safe pattern:
       expect(out).toMatch(/^\d{1,2}:\d{2} (am|pm)$/)
+    })
+  })
+
+  describe("Africa/Dar_es_Salaam regressions", () => {
+    test("rolls the display date at Tanzania midnight, not UTC midnight", () => {
+      jest.setSystemTime(new Date("2026-01-01T21:30:00.000Z"))
+
+      expect(dtNowLocaleCustomFormat("YYYY-MM-DD HH:mm")).toBe("2026-01-02 00:30")
+
+      jest.setSystemTime(new Date(FIXED_ISO))
+    })
+
+    test("interprets timetable wall-clock values in the mosque timezone", () => {
+      const prayerTime = dtLocale("05:15", "HH:mm")
+
+      expect(prayerTime.tz()).toBe(MOSQUE_TIME_ZONE)
+      expect(prayerTime.format("HH:mm Z")).toBe("05:15 +03:00")
     })
   })
 
@@ -153,6 +172,7 @@ describe("date utils (moment + moment-hijri)", () => {
       const m = dtHijriNow()
       expect(moment.isMoment(m)).toBe(true)
       expect(m.isValid()).toBe(true)
+      expect(m.tz()).toBe(MOSQUE_TIME_ZONE)
     })
 
     test("dtHijriNowLocaleCustomFormat formats", () => {

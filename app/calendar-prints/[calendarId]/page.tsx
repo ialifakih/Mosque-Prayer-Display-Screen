@@ -6,10 +6,11 @@ import { MosqueMetadataType } from '@/types/MosqueDataType'
 import { getMetaData } from '@/services/MosqueDataService'
 import CalendarPrintButton from '@/components/CalendarPrint/CalendarPrintButton'
 import { Card, CardContent } from '@/components/ui/card'
+import { dtNowLocale } from '@/lib/datetimeUtils'
 
 export default async function CalendarPrintPage({ params, searchParams }: { params: Promise<{ calendarId: string }>, searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const { calendarId } = await params
-  const { year = new Date().getFullYear().toString() } = await searchParams
+  const { year = dtNowLocale().year().toString() } = await searchParams
 
   const calendarPrintStyle = calendarPrintStyles.find((calendarPrintStyle) => calendarPrintStyle.id === calendarId)
 

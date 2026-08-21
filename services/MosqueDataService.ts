@@ -158,13 +158,19 @@ export async function getAnnouncement (): Promise<AnnouncementData | null> {
   }
 
   const now = dtNowLocale()
+  const announcementStart = dtLocale(
+    `${announcement.date} ${announcement.start_time}`,
+    'YYYY-MM-DD HH:mm',
+  )
+  const announcementEnd = dtLocale(
+    `${announcement.date} ${announcement.end_time}`,
+    'YYYY-MM-DD HH:mm',
+  )
 
   announcement.is_visible = (
-    now.isSame(announcement?.date, 'day')
-    && now.isSameOrAfter(`${announcement?.date} ${announcement?.start_time}`,
-      'minutes')
-    &&
-    now.isBefore(`${announcement?.date} ${announcement?.end_time}`, 'minutes')
+    now.isSame(announcementStart, 'day')
+    && now.isSameOrAfter(announcementStart, 'minute')
+    && now.isBefore(announcementEnd, 'minute')
   )
 
   return announcement

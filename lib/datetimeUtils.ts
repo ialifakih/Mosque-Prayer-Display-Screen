@@ -1,23 +1,29 @@
-import moment from "moment"
+import moment from "moment-timezone"
 import momentHijri from "moment-hijri"
 
 const LOCALE = process.env.LOCALE || "en"
 
-// Zanzibar/Tanzania uses East Africa Time (UTC+3) all year and has no DST.
-// Prayer data in this pilot is also expressed in Zanzibar local wall-clock time,
-// so all "now" and parsed prayer-time comparisons must use the same offset.
-const MOSQUE_UTC_OFFSET_MINUTES = 180
+// Never inherit the server, display device, or browser timezone.
+export const MOSQUE_TIME_ZONE = "Africa/Dar_es_Salaam"
 
 export function dtNow(): moment.Moment {
-  return moment().utcOffset(MOSQUE_UTC_OFFSET_MINUTES)
+  return moment.tz(MOSQUE_TIME_ZONE)
 }
 
 export function dtNowLocale(): moment.Moment {
-  return moment().utcOffset(MOSQUE_UTC_OFFSET_MINUTES).locale(LOCALE)
+  return dtNow().locale(LOCALE)
 }
 
 export function dtLocale(date: moment.MomentInput, format?: moment.MomentFormatSpecification, strict?: boolean): moment.Moment {
-  return moment(date, format, LOCALE, strict).utcOffset(MOSQUE_UTC_OFFSET_MINUTES, true)
+  if (typeof date !== "string") {
+    return moment(date).tz(MOSQUE_TIME_ZONE).locale(LOCALE)
+  }
+
+  if (format === undefined) {
+    return moment.tz(date, MOSQUE_TIME_ZONE).locale(LOCALE)
+  }
+
+  return moment.tz(date, format, LOCALE, strict ?? false, MOSQUE_TIME_ZONE)
 }
 
 export function dtNowLocaleCustomFormat(format: string): string {
@@ -134,7 +140,9 @@ export function dtHijriLocale(
   format?: moment.MomentFormatSpecification,
   strict?: boolean,
 ): moment.Moment {
-  return momentHijri(date, format, LOCALE, strict).utcOffset(MOSQUE_UTC_OFFSET_MINUTES, true)
+  return momentHijri(date, format, LOCALE, strict)
+    .tz(MOSQUE_TIME_ZONE, typeof date === "string")
+    .locale(LOCALE)
 }
 
 export function dtHijri(
@@ -142,11 +150,14 @@ export function dtHijri(
   format?: moment.MomentFormatSpecification,
   strict?: boolean,
 ): moment.Moment {
-  return momentHijri(date, format, strict).utcOffset(MOSQUE_UTC_OFFSET_MINUTES, true)
+  return momentHijri(date, format, strict)
+    .tz(MOSQUE_TIME_ZONE, typeof date === "string")
 }
 
 export function dtHijriNow(): moment.Moment {
-  return momentHijri().utcOffset(MOSQUE_UTC_OFFSET_MINUTES).locale(LOCALE)
+  return momentHijri()
+    .tz(MOSQUE_TIME_ZONE)
+    .locale(LOCALE)
 }
 
 export function dtHijriNowLocaleCustomFormat(format: string): string {

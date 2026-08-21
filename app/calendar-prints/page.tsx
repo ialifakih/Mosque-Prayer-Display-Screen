@@ -1,8 +1,9 @@
 import { CalendarPrintComponentProps } from "@/types/CalendarPrintType"
 import { calendarPrintStyles } from "@/components/CalendarPrint/PrintStyles/CalendarPrintStyles"
 import CalendarStyleSelectionCard from "@/components/CalendarPrint/CalendarStyleSelectionCard"
+import { dtLocale, dtNowLocale } from "@/lib/datetimeUtils"
 
-const year = new Date().getFullYear()+1
+const year = dtNowLocale().year() + 1
 const yearStr = year.toString()
 
 const exampleData: CalendarPrintComponentProps = {
@@ -15,7 +16,7 @@ const exampleData: CalendarPrintComponentProps = {
         {
           day_of_month: "1",
           sunrise_start: "08:03",
-          date: new Date(year, 1, 1),
+          date: dtLocale(`${year}-02-01`, "YYYY-MM-DD").toDate(),
           fajr: { start: "06:26", congregation_start: "06:56" },
           zuhr: { start: "12:09", congregation_start: "12:45" },
           asr: { start: "13:46", congregation_start: "14:45" },
@@ -27,7 +28,7 @@ const exampleData: CalendarPrintComponentProps = {
         {
           day_of_month: "2",
           sunrise_start: "08:03",
-          date: new Date(year, 1, 2),
+          date: dtLocale(`${year}-02-02`, "YYYY-MM-DD").toDate(),
           fajr: { start: "06:26", congregation_start: "06:56" },
           zuhr: { start: "12:09", congregation_start: "12:45" },
           asr: { start: "13:46", congregation_start: "14:45" },
@@ -39,7 +40,7 @@ const exampleData: CalendarPrintComponentProps = {
         {
           day_of_month: "3",
           sunrise_start: "08:03",
-          date: new Date(year, 1, 3),
+          date: dtLocale(`${year}-02-03`, "YYYY-MM-DD").toDate(),
           fajr: { start: "06:26", congregation_start: "06:56" },
           zuhr: { start: "12:09", congregation_start: "12:45" },
           asr: { start: "13:46", congregation_start: "14:45" },
