@@ -1,6 +1,7 @@
 import { getMosqueData } from "@/services/MosqueDataService"
 import { NextResponse } from "next/server"
 import { redirect } from "next/navigation"
+import { ZANZIBAR_PILOT_LOGO } from "@/lib/publicMosqueMetadata"
 
 export async function GET(request: Request) {
   const mosqueData = await getMosqueData()
@@ -20,5 +21,5 @@ export async function GET(request: Request) {
     })
   }
 
-  return redirect("/mosqueos-logo/safari-pinned-tab.svg")
+  return redirect(ZANZIBAR_PILOT_LOGO)
 }

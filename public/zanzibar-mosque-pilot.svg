@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title description">
+  <title id="title">Zanzibar Mosque Pilot</title>
+  <desc id="description">A restrained mosque arch and crescent mark in deep green, cream, and gold.</desc>
+  <rect width="256" height="256" rx="36" fill="#0B3D2E"/>
+  <path d="M61 199V105c0-38 30-68 67-68s67 30 67 68v94" fill="none" stroke="#FFF8E7" stroke-width="12"/>
+  <path d="M91 199v-76c0-21 17-38 37-38s37 17 37 38v76" fill="#072F25" stroke="#C6A15B" stroke-width="8"/>
+  <path d="M128 85V57" stroke="#C6A15B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M143 37a19 19 0 1 0 0 32 16 16 0 1 1 0-32Z" fill="#C6A15B"/>
+  <path d="M43 205h170" stroke="#C6A15B" stroke-width="8" stroke-linecap="round"/>
+</svg>

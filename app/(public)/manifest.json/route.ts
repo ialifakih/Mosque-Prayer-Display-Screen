@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     .replace(/[^a-z0-9]+/g, "_")
     .replace(/^_+|_+$/g, "")
   const short_name = metadata.short_name ?? masjidName.substring(0, 15)
-  const primaryColor = process.env.THEME_COLOR_PRIMARY ?? "#0C5A4B"
+  const primaryColor = process.env.THEME_COLOR_PRIMARY ?? "#0B3D2E"
 
   return Response.json({
     id: id,

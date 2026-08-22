@@ -6,21 +6,29 @@ export default function MosqueMetadata({
   metadata: MosqueMetadataType
 }) {
   return (
-    <div className="md:flex text-mosqueBrand-onPrimary text-center md:text-left">
-      <div className="mr-4 flex-shrink-0 self-center">
+    <div className="flex flex-col items-center gap-3 text-center text-mosqueBrand-onPrimary md:flex-row md:items-start md:gap-4 md:text-left">
+      <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center border border-mosqueBrand-highlight/50 bg-mosqueBrand-primaryAlt p-2">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          className="m-2 max-w-full lg:max-w-lg max-h-16 mx-auto"
+          className="mx-auto max-h-16 max-w-full object-contain"
           src={metadata.logo_url}
-          alt=""
+          alt={`${metadata.name} logo`}
         />
       </div>
       <div>
-        <h2 className="mt-3 md:mt-5 font-bold text-2xl md:text-3xl">
+        <h2 className="text-2xl font-bold leading-tight md:text-3xl">
           {metadata.name}
         </h2>
-        <p className="mt-3 text-xl mx-5 md:mx-0">{metadata.address}</p>
-        <p className="text-xl">{metadata.website}</p>
+        {metadata.address && (
+          <p className="mx-5 mt-2 text-lg leading-snug text-mosqueBrand-onPrimary/90 md:mx-0">
+            {metadata.address}
+          </p>
+        )}
+        {metadata.website && (
+          <p className="mt-1 text-lg leading-snug text-mosqueBrand-highlight">
+            {metadata.website}
+          </p>
+        )}
       </div>
     </div>
   )

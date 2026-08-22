@@ -1,7 +1,7 @@
 import { getMosqueData } from "@/services/MosqueDataService"
 import { NextResponse } from "next/server"
 import { redirect } from "next/navigation"
-import { GENERIC_MOSQUE_LOGO } from "@/lib/publicMosqueMetadata"
+import { ZANZIBAR_PILOT_LOGO } from "@/lib/publicMosqueMetadata"
 
 export async function GET(request: Request) {
   const mosqueData = await getMosqueData()
@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const logo = metadata.logo_url
 
   if (!logo?.trim()) {
-    return redirect(GENERIC_MOSQUE_LOGO)
+    return redirect(ZANZIBAR_PILOT_LOGO)
   }
 
   const imageRes = await fetch(logo)

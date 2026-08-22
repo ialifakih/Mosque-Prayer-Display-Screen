@@ -65,28 +65,25 @@ export default async function Home() {
 
   return (
     <ConfigurationProvider config={config}>
-      <div className="bg-mosqueBrand min-h-screen min-w-full">
-        <main className="md:p-5">
-          <div className="md:grid md:grid-cols-8">
-            <div className="md:col-span-3">
-              <div className="p-4 md:p-6">
-                <Clock />
-              </div>
-              <div className="p-4 md:p-6">
-                <Date />
-              </div>
-              <div className="p-4 md:p-6">
-                <MosqueMetadata metadata={mosqueMetadata} />
-              </div>
-              <div className="hidden md:p-6 md:block">
+      <div className="min-h-screen min-w-full bg-mosqueBrand">
+        <main className="p-4 md:p-6 lg:p-8">
+          <div className="md:grid md:grid-cols-8 md:gap-6 lg:gap-8">
+            <header className="flex flex-col gap-5 md:col-span-3 md:gap-7 md:border-r md:border-mosqueBrand-highlight/40 md:pr-6 lg:pr-8">
+              <Clock />
+              <Date />
+              <MosqueMetadata metadata={mosqueMetadata} />
+              <div className="hidden md:block md:pt-1">
                 <Notice />
               </div>
-            </div>
-            <div className="p-4 md:p-6 md:col-span-5">
+            </header>
+            <section
+              aria-label="Prayer times"
+              className="pt-5 md:col-span-5 md:pt-0"
+            >
               <PrayerTimes today={today} tomorrow={tomorrow} />
-            </div>
+            </section>
           </div>
-          <div className="p-4 md:p-6">
+          <div className="pt-5 md:pt-7">
             <SlidingBanner slides={slides} />
           </div>
           <ServiceWorker />

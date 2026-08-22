@@ -10,7 +10,7 @@ export default function UpcomingPrayerDayTiles({
     <dl
       className={`grid justify-items-stretch lg:grid-cols-6 text-center gap-0 md:gap-3`}
     >
-      <div className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto">
+      <div className="border-t-2 border-mosqueBrand-highlight bg-mosqueBrand-primaryAlt p-4 text-mosqueBrand-onPrimary lg:col-auto lg:p-6">
         <dt className="text-sm lg:text-2xl font-medium">
           Jamaa times for
         </dt>
@@ -18,7 +18,7 @@ export default function UpcomingPrayerDayTiles({
           {times.display_date}
         </dd>
       </div>
-      <div className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto">
+      <div className="border-t-2 border-mosqueBrand-highlight bg-mosqueBrand-primaryAlt p-4 text-mosqueBrand-onPrimary lg:col-auto lg:p-6">
         <dt className="text-sm lg:text-2xl font-medium">
           Fajr الفجر ({times.display_day_label})
         </dt>
@@ -26,7 +26,7 @@ export default function UpcomingPrayerDayTiles({
           {dtFormatTimeTo12h(times.fajr.congregation_start)}
         </dd>
       </div>
-      <div className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto">
+      <div className="border-t-2 border-mosqueBrand-highlight bg-mosqueBrand-primaryAlt p-4 text-mosqueBrand-onPrimary lg:col-auto lg:p-6">
         <dt className="text-sm lg:text-2xl font-medium">
           Dhuhr الظهر ({times.display_day_label})
         </dt>
@@ -34,7 +34,7 @@ export default function UpcomingPrayerDayTiles({
           {dtFormatTimeTo12h(times.zuhr.congregation_start)}
         </dd>
       </div>
-      <div className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto">
+      <div className="border-t-2 border-mosqueBrand-highlight bg-mosqueBrand-primaryAlt p-4 text-mosqueBrand-onPrimary lg:col-auto lg:p-6">
         <dt className="text-sm lg:text-2xl font-medium">
           Asr العصر ({times.display_day_label})
         </dt>
@@ -42,7 +42,7 @@ export default function UpcomingPrayerDayTiles({
           {dtFormatTimeTo12h(times.asr.congregation_start)}
         </dd>
       </div>
-      <div className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto">
+      <div className="border-t-2 border-mosqueBrand-highlight bg-mosqueBrand-primaryAlt p-4 text-mosqueBrand-onPrimary lg:col-auto lg:p-6">
         <dt className="text-sm lg:text-2xl font-medium">
           Maghrib المغرب ({times.display_day_label})
         </dt>
@@ -50,7 +50,7 @@ export default function UpcomingPrayerDayTiles({
           {dtFormatTimeTo12h(times.maghrib.congregation_start)}
         </dd>
       </div>
-      <div className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto">
+      <div className="border-t-2 border-mosqueBrand-highlight bg-mosqueBrand-primaryAlt p-4 text-mosqueBrand-onPrimary lg:col-auto lg:p-6">
         <dt className="text-sm lg:text-2xl font-medium">
           Isha العشاء ({times.display_day_label})
         </dt>

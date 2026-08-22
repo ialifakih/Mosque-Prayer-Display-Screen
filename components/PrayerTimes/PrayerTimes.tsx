@@ -57,7 +57,7 @@ export default function PrayerTimes({
     <table className="text-mosqueBrand-onPrimary mx-auto table-auto border-collapse border-none w-full">
       <thead>
         <tr
-          className="text-center [&>*]:p-2 md:[&>*]:p-8
+          className="text-center text-mosqueBrand-highlight [&>*]:p-2 md:[&>*]:p-6
           md:[&>*]:border [&>*]:border-mosqueBrand-primaryAlt
           [&>th]:border-t-0 [&>th:last-of-type]:border-r-0"
         >
@@ -75,7 +75,7 @@ export default function PrayerTimes({
               className="
               text-center
               [&>*]:p-4
-              md:[&>*]:p-8
+              md:[&>*]:p-6
               md:[&>*]:border md:[&>*]:border-b-0 [&>*]:border-mosqueBrand-primaryAlt
               md:[&>th]:w-20
               [&>th]:border-l-0

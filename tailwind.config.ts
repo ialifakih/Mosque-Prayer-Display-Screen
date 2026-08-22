@@ -1,10 +1,10 @@
 import type { Config } from "tailwindcss"
 
-const primaryColor       = process.env.THEME_COLOR_PRIMARY     || '#0F715D';
-const primaryAltColor    = process.env.THEME_COLOR_PRIMARY_ALT || '#0C5A4B';
-const onPrimaryColor     = process.env.THEME_COLOR_ON_PRIMARY     || '#FFFFFF';
-const onPrimaryAltColor  = process.env.THEME_COLOR_ON_PRIMARY_ALT || '#FFFFFF';
-const highlightColor     = process.env.THEME_COLOR_HIGHLIGHT   || '#10b981';
+const primaryColor       = process.env.THEME_COLOR_PRIMARY     || '#0B3D2E';
+const primaryAltColor    = process.env.THEME_COLOR_PRIMARY_ALT || '#072F25';
+const onPrimaryColor     = process.env.THEME_COLOR_ON_PRIMARY     || '#FFF8E7';
+const onPrimaryAltColor  = process.env.THEME_COLOR_ON_PRIMARY_ALT || '#FFF8E7';
+const highlightColor     = process.env.THEME_COLOR_HIGHLIGHT   || '#C6A15B';
 
 const config: Config = {
     darkMode: ["class"],

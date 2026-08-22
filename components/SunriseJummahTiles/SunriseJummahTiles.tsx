@@ -14,7 +14,7 @@ export default function SunriseJummahTiles({
         jummahTimes.length + 1
       } text-center gap-0 md:gap-3`}
     >
-      <div className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto">
+      <div className="border-t-2 border-mosqueBrand-highlight bg-mosqueBrand-primaryAlt p-4 text-mosqueBrand-onPrimary lg:col-auto lg:p-6">
         <dt className="text-sm lg:text-2xl font-medium">Kuchomoza Jua</dt>
         <dd className="mt-1 text-xl lg:text-5xl font-bold tracking-tight">
           {dtFormatTimeTo12h(sunrise)}
@@ -23,7 +23,7 @@ export default function SunriseJummahTiles({
 
       {jummahTimes.map((jummahTime, index) => (
         <div
-          className="bg-mosqueBrand-primaryAlt text-white p-4 lg:p-6 lg:col-auto"
+          className="border-t-2 border-mosqueBrand-highlight bg-mosqueBrand-primaryAlt p-4 text-mosqueBrand-onPrimary lg:col-auto lg:p-6"
           key={index}
         >
           <dt className="text-sm lg:text-2xl font-medium">

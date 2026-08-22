@@ -1,5 +1,5 @@
 import {
-  GENERIC_MOSQUE_LOGO,
+  ZANZIBAR_PILOT_LOGO,
   getPublicMosqueMetadata,
 } from "@/lib/publicMosqueMetadata"
 
@@ -16,12 +16,12 @@ describe("getPublicMosqueMetadata", () => {
     expect(getPublicMosqueMetadata(metadata)).toEqual(metadata)
   })
 
-  it("uses only generic public fallbacks when identity fields are absent", () => {
+  it("uses the Zanzibar pilot fallback when identity fields are absent", () => {
     expect(getPublicMosqueMetadata({})).toEqual({
-      name: "Mosque",
-      address: "",
+      name: "Zanzibar Mosque Pilot",
+      address: "Zanzibar, Tanzania",
       website: "",
-      logo_url: GENERIC_MOSQUE_LOGO,
+      logo_url: ZANZIBAR_PILOT_LOGO,
     })
   })
 
@@ -34,10 +34,10 @@ describe("getPublicMosqueMetadata", () => {
         logo_url: "\n",
       }),
     ).toEqual({
-      name: "Mosque",
-      address: "",
+      name: "Zanzibar Mosque Pilot",
+      address: "Zanzibar, Tanzania",
       website: "",
-      logo_url: GENERIC_MOSQUE_LOGO,
+      logo_url: ZANZIBAR_PILOT_LOGO,
     })
   })
 })
