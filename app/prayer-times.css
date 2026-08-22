@@ -1,3 +1,346 @@
-body {
-  @apply bg-mosqueBrand;
-}
+  .prayer-display-shell {
+    @apply min-h-screen min-w-full bg-[#f8f3e6] text-mosqueBrand;
+  }
+
+  .prayer-display-header {
+    @apply grid gap-5 border-b-2 border-mosqueBrand-highlight bg-[#fffdf7] px-5 py-5 text-mosqueBrand;
+  }
+
+  .prayer-display-header-date,
+  .prayer-display-header-clock,
+  .prayer-display-header-mosque {
+    @apply flex items-center justify-center;
+  }
+
+  .display-date {
+    @apply text-center;
+  }
+
+  .display-date-gregorian {
+    @apply text-2xl font-bold leading-tight tracking-tight;
+  }
+
+  .display-date-hijri {
+    @apply mt-1 text-xl font-medium text-mosqueBrand-highlight;
+  }
+
+  .display-mosque-metadata {
+    @apply flex min-w-0 items-center justify-center gap-4 text-center;
+  }
+
+  .display-mosque-logo {
+    @apply flex h-20 w-20 flex-none items-center justify-center rounded-lg border border-mosqueBrand-highlight/70 bg-[#f8f3e6] p-2;
+  }
+
+  .display-mosque-name {
+    @apply truncate text-3xl font-bold leading-tight tracking-tight;
+  }
+
+  .display-mosque-location {
+    @apply mt-1 truncate text-lg font-medium text-mosqueBrand-highlight;
+  }
+
+  .display-clock {
+    @apply flex flex-col items-center bg-transparent text-center;
+  }
+
+  .display-clock-label {
+    @apply text-sm font-bold uppercase tracking-[0.18em] text-mosqueBrand-highlight;
+  }
+
+  .display-clock-time {
+    @apply mt-1 text-5xl font-bold leading-none tracking-tight;
+  }
+
+  .prayer-display-main {
+    @apply grid gap-4 bg-[#f8f3e6] p-4;
+  }
+
+  .prayer-display-sidebar,
+  .prayer-display-content {
+    @apply grid gap-4;
+  }
+
+  .next-prayer-card,
+  .jummah-card {
+    @apply overflow-hidden rounded-xl border border-mosqueBrand-highlight/70 bg-[#fffdf7] text-mosqueBrand shadow-sm;
+  }
+
+  .next-prayer-card {
+    @apply flex min-h-[30rem] flex-col justify-between text-center;
+  }
+
+  .next-prayer-card > div:first-child {
+    @apply bg-mosqueBrand px-5 py-4 text-mosqueBrand-onPrimary;
+  }
+
+  .display-kicker {
+    @apply text-2xl font-bold uppercase leading-none tracking-[0.04em];
+  }
+
+  .display-kicker-translation {
+    @apply mt-2 text-base font-semibold uppercase tracking-[0.14em] text-mosqueBrand-highlight;
+  }
+
+  .next-prayer-name {
+    @apply mx-6 border-b border-mosqueBrand-highlight/60 pb-5 text-5xl font-bold leading-tight;
+  }
+
+  .next-prayer-start,
+  .next-prayer-countdown {
+    @apply flex flex-col items-center;
+  }
+
+  .next-prayer-start span,
+  .next-prayer-countdown span {
+    @apply text-base font-semibold uppercase tracking-[0.14em] text-[#9a7520];
+  }
+
+  .next-prayer-start strong {
+    @apply mt-2 text-6xl leading-none;
+  }
+
+  .next-prayer-countdown time {
+    @apply mt-2 text-5xl font-bold leading-none;
+  }
+
+  .next-prayer-countdown {
+    @apply pb-7;
+  }
+
+  .jummah-card {
+    @apply flex min-h-[11rem] flex-col items-center text-center;
+  }
+
+  .jummah-card p {
+    @apply w-full bg-mosqueBrand px-5 py-3 text-xl font-bold uppercase tracking-[0.05em] text-mosqueBrand-onPrimary;
+  }
+
+  .jummah-card time {
+    @apply my-auto text-5xl font-bold leading-none text-mosqueBrand;
+  }
+
+  .prayer-table-panel {
+    @apply overflow-hidden rounded-xl border border-mosqueBrand-highlight/70 bg-[#fffdf7] shadow-sm;
+  }
+
+  .prayer-table {
+    @apply h-full w-full table-fixed border-collapse;
+  }
+
+  .prayer-table thead {
+    @apply bg-mosqueBrand text-mosqueBrand-onPrimary;
+  }
+
+  .prayer-table th,
+  .prayer-table td {
+    @apply border-r border-mosqueBrand-highlight/60 text-center last:border-r-0;
+  }
+
+  .prayer-table thead th {
+    @apply px-4 py-5 text-xl font-bold uppercase tracking-[0.12em];
+  }
+
+  .prayer-table tbody tr {
+    @apply border-t border-mosqueBrand-highlight/40 bg-[#fffdf7] transition-colors;
+  }
+
+  .prayer-table tbody th,
+  .prayer-table tbody td {
+    @apply px-4 py-5 text-3xl;
+  }
+
+  .prayer-table tbody th {
+    @apply relative text-left font-bold;
+  }
+
+  .prayer-table tbody td {
+    @apply font-medium;
+  }
+
+  .prayer-table tbody tr.is-next-prayer {
+    @apply bg-mosqueBrand text-mosqueBrand-onPrimary;
+  }
+
+  .prayer-table tbody tr.is-next-prayer th::before {
+    content: "";
+    @apply absolute bottom-0 left-0 top-0 w-2 bg-mosqueBrand-highlight;
+  }
+
+  .prayer-table tbody tr.is-next-prayer .secondary-start-time {
+    @apply text-mosqueBrand-onPrimary/75;
+  }
+
+  .secondary-start-time {
+    @apply ml-3 text-xl text-mosqueBrand/70;
+  }
+
+  .announcement-panel {
+    @apply flex min-h-[11rem] flex-col rounded-xl border border-mosqueBrand-highlight/80 bg-[#fffdf7] px-6 py-5 text-mosqueBrand shadow-sm;
+  }
+
+  .announcement-heading {
+    @apply flex items-center gap-4;
+  }
+
+  .announcement-mark {
+    @apply h-7 w-2 bg-mosqueBrand-highlight;
+  }
+
+  .announcement-heading h2 {
+    @apply text-xl font-bold uppercase tracking-[0.1em];
+  }
+
+  .announcement-space {
+    @apply mt-4 flex-1 border-t border-mosqueBrand-highlight/50;
+  }
+
+  @media (min-width: 768px) {
+    .prayer-display-header {
+      @apply grid-cols-[1fr_1.35fr_1fr] px-7 py-6;
+    }
+
+    .prayer-display-header-date {
+      @apply justify-start;
+    }
+
+    .prayer-display-header-clock {
+      @apply justify-end;
+    }
+
+    .display-date {
+      @apply text-left;
+    }
+
+    .display-clock {
+      @apply items-end text-right;
+    }
+
+    .prayer-display-main {
+      @apply grid-cols-[minmax(20rem,0.78fr)_minmax(0,2.22fr)];
+    }
+
+    .prayer-table thead th {
+      @apply text-2xl;
+    }
+
+    .prayer-table tbody th,
+    .prayer-table tbody td {
+      @apply text-4xl;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .prayer-display-shell {
+      @apply h-screen overflow-hidden;
+    }
+
+    .prayer-display-header {
+      height: 9.5rem;
+      @apply grid-cols-[1fr_1.5fr_1fr] gap-8 px-8 py-5;
+    }
+
+    .display-date-gregorian {
+      @apply text-[2rem];
+    }
+
+    .display-date-hijri {
+      @apply mt-2 text-[1.5rem];
+    }
+
+    .display-mosque-logo {
+      @apply h-20 w-20 p-2.5;
+    }
+
+    .display-mosque-name {
+      @apply max-w-[33rem] text-[2.35rem];
+    }
+
+    .display-mosque-location {
+      @apply max-w-[33rem] text-xl;
+    }
+
+    .display-clock-label {
+      @apply text-lg;
+    }
+
+    .display-clock-time {
+      @apply text-[4.7rem] text-mosqueBrand;
+    }
+
+    .prayer-display-main {
+      height: calc(100vh - 9.5rem);
+      @apply grid-cols-[27rem_minmax(0,1fr)] gap-4 p-4;
+    }
+
+    .prayer-display-sidebar {
+      @apply grid-rows-[minmax(0,1fr)_10rem];
+    }
+
+    .prayer-display-content {
+      @apply grid-rows-[minmax(0,1fr)_10rem];
+    }
+
+    .next-prayer-card {
+      @apply min-h-0;
+    }
+
+    .display-kicker {
+      @apply text-[1.55rem];
+    }
+
+    .display-kicker-translation {
+      @apply text-lg;
+    }
+
+    .next-prayer-name {
+      @apply pb-4 text-[3.1rem];
+    }
+
+    .next-prayer-start strong {
+      @apply text-[4.15rem];
+    }
+
+    .next-prayer-countdown time {
+      @apply text-[3.35rem];
+    }
+
+    .jummah-card {
+      @apply min-h-0;
+    }
+
+    .prayer-table thead {
+      height: 4.6rem;
+    }
+
+    .prayer-table thead th {
+      @apply text-[1.8rem];
+    }
+
+    .prayer-table tbody th,
+    .prayer-table tbody td {
+      @apply px-8 py-3 text-[3.05rem];
+    }
+
+    .prayer-table thead th:first-child,
+    .prayer-table tbody th {
+      width: 42%;
+    }
+
+    .prayer-table thead th:nth-child(2),
+    .prayer-table thead th:nth-child(3) {
+      width: 29%;
+    }
+
+    .secondary-start-time {
+      @apply block text-2xl;
+    }
+
+    .announcement-panel {
+      @apply min-h-0 px-7 py-5;
+    }
+
+    .announcement-heading h2 {
+      @apply text-2xl;
+    }
+  }

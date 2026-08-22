@@ -10,11 +10,11 @@ export default function Date() {
   const hijriDate = dtHijriNowLocaleCustomFormat("iD iMMMM iYYYY")
 
   return (
-    <div className="text-center text-mosqueBrand-onPrimary md:text-left">
-      <p className="text-2xl font-bold leading-tight md:text-4xl lg:text-5xl">
+    <div className="display-date">
+      <p className="display-date-gregorian">
         {englishDate}
       </p>
-      <p className="mt-2 text-xl font-medium text-mosqueBrand-highlight md:mt-3 md:text-3xl lg:text-4xl">
+      <p className="display-date-hijri">
         {hijriDate}
       </p>
     </div>

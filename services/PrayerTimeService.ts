@@ -1,7 +1,24 @@
-import { DailyPrayerTime } from "@/types/DailyPrayerTimeType"
+import {
+  DailyPrayerTime,
+  PrayerTime,
+} from "@/types/DailyPrayerTimeType"
 import { dtLocale, dtNowLocale } from "@/lib/datetimeUtils"
 
 const blackoutPeriod = process.env.NEXT_PUBLIC_BLACKOUT_PERIOD ?? 13 // defaults to 13 minutes
+
+export function getPrayerTimeOnDay(
+  time: string,
+  prayerDay = dtNowLocale(),
+) {
+  const parsedTime = dtLocale(time, ["HH:mm"])
+
+  return prayerDay.clone().set({
+    hour: parsedTime.hour(),
+    minute: parsedTime.minute(),
+    second: 0,
+    millisecond: 0,
+  })
+}
 
 export function isBlackout(prayerTimes: DailyPrayerTime) {
   const currentTime = dtNowLocale()
@@ -44,7 +61,9 @@ export function getNextPrayer(today: DailyPrayerTime) {
   }
 
   todaysTimes.forEach((time, index) => {
-    if (currentTime < dtLocale(time, ["HH:mm"]) && !nextPrayertime.today) {
+    const prayerTime = getPrayerTimeOnDay(time, currentTime)
+
+    if (currentTime.isBefore(prayerTime) && !nextPrayertime.today) {
       nextPrayertime = {
         today: true,
         prayerIndex: index,
@@ -53,4 +72,16 @@ export function getNextPrayer(today: DailyPrayerTime) {
   })
 
   return nextPrayertime
+}
+
+const prayerKeys = ["fajr", "zuhr", "asr", "maghrib", "isha"] as const
+
+export function getPrayerTimeForNextPrayer(
+  today: DailyPrayerTime,
+  tomorrow: DailyPrayerTime,
+  nextPrayer: ReturnType<typeof getNextPrayer>,
+): PrayerTime {
+  const prayerDay = nextPrayer.today ? today : tomorrow
+
+  return prayerDay[prayerKeys[nextPrayer.prayerIndex]]
 }

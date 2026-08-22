@@ -1,6 +1,10 @@
 process.env.TZ = "America/Los_Angeles"
 
-import { isBlackout, getNextPrayer } from "./PrayerTimeService"
+import {
+  isBlackout,
+  getNextPrayer,
+  getPrayerTimeForNextPrayer,
+} from "./PrayerTimeService"
 import { DailyPrayerTime } from "@/types/DailyPrayerTimeType"
 
 const prayerTimes: DailyPrayerTime = {
@@ -41,5 +45,42 @@ describe("Tanzania prayer-time decisions", () => {
     jest.setSystemTime(new Date("2026-01-02T17:01:00.000Z"))
 
     expect(getNextPrayer(prayerTimes)).toEqual({ today: false, prayerIndex: 0 })
+  })
+
+  test("selects tomorrow Fajr before midnight and today's Fajr after midnight", () => {
+    const saturday: DailyPrayerTime = {
+      ...prayerTimes,
+      day_of_month: "22",
+      fajr: { start: "04:20", congregation_start: "04:50" },
+    }
+    const sunday: DailyPrayerTime = {
+      ...prayerTimes,
+      day_of_month: "23",
+      fajr: { start: "04:22", congregation_start: "04:52" },
+    }
+    const monday: DailyPrayerTime = {
+      ...prayerTimes,
+      day_of_month: "24",
+      fajr: { start: "04:24", congregation_start: "04:54" },
+    }
+
+    // Saturday 23:40 in Tanzania: the next prayer belongs to Sunday.
+    jest.setSystemTime(new Date("2026-08-22T20:40:00.000Z"))
+    const beforeMidnight = getNextPrayer(saturday)
+
+    expect(beforeMidnight).toEqual({ today: false, prayerIndex: 0 })
+    expect(
+      getPrayerTimeForNextPrayer(saturday, sunday, beforeMidnight),
+    ).toEqual({ start: "04:22", congregation_start: "04:52" })
+
+    // Sunday 00:26 in Tanzania: the next prayer belongs to Sunday itself.
+    jest.setSystemTime(new Date("2026-08-22T21:26:00.000Z"))
+    const afterMidnight = getNextPrayer(sunday)
+
+    expect(afterMidnight).toEqual({ today: true, prayerIndex: 0 })
+    expect(getPrayerTimeForNextPrayer(sunday, monday, afterMidnight)).toEqual({
+      start: "04:22",
+      congregation_start: "04:52",
+    })
   })
 })
