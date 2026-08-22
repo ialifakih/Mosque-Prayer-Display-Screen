@@ -1,10 +1,10 @@
 import { getMosqueData } from "@/services/MosqueDataService"
+import { getPublicMosqueMetadata } from "@/lib/publicMosqueMetadata"
 
 export async function GET(request: Request) {
   const mosqueData = await getMosqueData()
-  const metadata = mosqueData.metadata
+  const metadata = getPublicMosqueMetadata(mosqueData.metadata)
   const masjidName = metadata.name
-  const logo = metadata.logo_url
   const id = masjidName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "_")

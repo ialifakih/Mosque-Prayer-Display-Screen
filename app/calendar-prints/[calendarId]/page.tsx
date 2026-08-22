@@ -4,6 +4,7 @@ import { CalendarPrintMonthlyPrayerTimes } from '@/types/CalendarPrintType'
 import { getCalendarPrintMonthlyPrayerTimesForYear } from '@/services/MosqueDataService'
 import { MosqueMetadataType } from '@/types/MosqueDataType'
 import { getMetaData } from '@/services/MosqueDataService'
+import { getPublicMosqueMetadata } from '@/lib/publicMosqueMetadata'
 import CalendarPrintButton from '@/components/CalendarPrint/CalendarPrintButton'
 import { Card, CardContent } from '@/components/ui/card'
 import { dtNowLocale } from '@/lib/datetimeUtils'
@@ -20,7 +21,9 @@ export default async function CalendarPrintPage({ params, searchParams }: { para
 
 
   const monthlyPrayerTimes: CalendarPrintMonthlyPrayerTimes[] = await getCalendarPrintMonthlyPrayerTimesForYear(year as string)
-  const metadata: MosqueMetadataType = await getMetaData()
+  const metadata: MosqueMetadataType = getPublicMosqueMetadata(
+    await getMetaData(),
+  )
 
   return (
     <>

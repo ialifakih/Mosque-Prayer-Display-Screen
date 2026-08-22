@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "name": "East London Mosque",
-    "logo_url": "https://raw.githubusercontent.com/DilwoarH/Mosque-Screen/master/src/_components/logo/assets/ELM-logo-notext-white.gif",
-    "address": "82–92 Whitechapel Road, London E1 1JQ",
-    "website": "eastlondonmosque.org.uk"
+    "name": "Mosque",
+    "logo_url": "",
+    "address": "",
+    "website": ""
   },
   "jummah_times": [
     { "label": "Jummah 1", "time": "13:00" },

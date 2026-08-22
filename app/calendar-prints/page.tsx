@@ -2,6 +2,8 @@ import { CalendarPrintComponentProps } from "@/types/CalendarPrintType"
 import { calendarPrintStyles } from "@/components/CalendarPrint/PrintStyles/CalendarPrintStyles"
 import CalendarStyleSelectionCard from "@/components/CalendarPrint/CalendarStyleSelectionCard"
 import { dtLocale, dtNowLocale } from "@/lib/datetimeUtils"
+import { getMetaData } from "@/services/MosqueDataService"
+import { getPublicMosqueMetadata } from "@/lib/publicMosqueMetadata"
 
 const year = dtNowLocale().year() + 1
 const yearStr = year.toString()
@@ -52,12 +54,13 @@ const exampleData: CalendarPrintComponentProps = {
       ],
     },
   ],
-  metadata: {
-    name: "Example Mosque",
-  },
+  metadata: {},
 }
 
 export default async function CalendarGeneratorPage() {
+  const metadata = getPublicMosqueMetadata(await getMetaData())
+  const previewData = { ...exampleData, metadata }
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-2 bg-mosqueBrand-primary text-mosqueBrand-onPrimary py-10 px-4 sm:px-6 lg:px-8">
@@ -74,7 +77,7 @@ export default async function CalendarGeneratorPage() {
           <CalendarStyleSelectionCard 
             key={calendarPrintStyle.id}
             calendarId={calendarPrintStyle.id}
-            data={exampleData} />
+            data={previewData} />
         ))}
       </div>
     </div>

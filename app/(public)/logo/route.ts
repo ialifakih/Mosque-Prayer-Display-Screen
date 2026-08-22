@@ -1,15 +1,16 @@
 import { getMosqueData } from "@/services/MosqueDataService"
 import { NextResponse } from "next/server"
+import { redirect } from "next/navigation"
+import { GENERIC_MOSQUE_LOGO } from "@/lib/publicMosqueMetadata"
 
 export async function GET(request: Request) {
   const mosqueData = await getMosqueData()
   const metadata = mosqueData.metadata
-  const masjidName = metadata.name
   const logo = metadata.logo_url
-  const id = masjidName
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "_")
-    .replace(/^_+|_+$/g, "")
+
+  if (!logo?.trim()) {
+    return redirect(GENERIC_MOSQUE_LOGO)
+  }
 
   const imageRes = await fetch(logo)
 

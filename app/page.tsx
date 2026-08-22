@@ -27,9 +27,10 @@ import "./prayer-times.css"
 import Announcement from "@/components/Announcement/Announcement"
 import { ConfigurationJson } from "@/types/ConfigurationType"
 import { ConfigurationProvider } from "@/providers/ConfigurationProvider"
+import { getPublicMosqueMetadata } from "@/lib/publicMosqueMetadata"
 
 export async function generateMetadata(): Promise<Metadata> {
-  const mosqueMetadata: MosqueMetadataType = await getMetaData()
+  const mosqueMetadata = getPublicMosqueMetadata(await getMetaData())
 
   return {
     title: `${mosqueMetadata.name} Prayer Times | MosqueScreen Project by MosqueOS`,
@@ -41,7 +42,9 @@ export default async function Home() {
   const today: DailyPrayerTime = await getPrayerTimesForToday()
   const tomorrow: DailyPrayerTime = await getPrayerTimesForTomorrow()
   const jummahTimes: JummahTimes = await getJummahTimes()
-  const mosqueMetadata: MosqueMetadataType = await getMetaData()
+  const mosqueMetadata: MosqueMetadataType = getPublicMosqueMetadata(
+    await getMetaData(),
+  )
   const config: ConfigurationJson = await getConfiguration()
   const upcomingPrayerDays: UpcomingPrayerTimes[] =
     await getPrayerTimesForUpcomingDays()
