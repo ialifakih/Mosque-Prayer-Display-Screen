@@ -1,168 +1,188 @@
-'use client'
+"use client"
 
-import React, { useState, useEffect } from 'react'
-import { AnnouncementData } from '@/types/AnnouncementType'
-import { createAnnouncement } from '@/services/MosqueDataService'
+import {
+  createAnnouncementAction,
+  updateAnnouncementAction,
+} from "@/app/admin/actions/announcements"
 import { Spinner } from "@/components/ui/spinner"
-import { dtLocale, dtNowLocale } from "@/lib/datetimeUtils"
+import type {
+  AnnouncementInput,
+  AnnouncementRecord,
+} from "@/types/AnnouncementType"
+import { useState } from "react"
 
 interface AnnouncementFormProps {
-  onComplete: (announcement: AnnouncementData) => void;
+  announcement: AnnouncementRecord | null
+  today: string
+  onComplete: (announcement: AnnouncementRecord) => void
+  onPreview: (announcement: AnnouncementInput) => void
 }
 
-export function AnnouncementForm ({
+export function AnnouncementForm({
+  announcement,
+  today,
   onComplete,
+  onPreview,
 }: AnnouncementFormProps) {
-  const [type, setType] = useState<'General' | 'Car'>('General')
-  const [date, setDate] = useState('')
-  const [startTime, setStartTime] = useState('')
-  const [duration, setDuration] = useState(5)
-  const [message, setMessage] = useState('')
-  const [carReg, setCarReg] = useState('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [title, setTitle] = useState(announcement?.title ?? "")
+  const [message, setMessage] = useState(announcement?.message ?? "")
+  const [startDate, setStartDate] = useState(
+    announcement?.start_date ?? today,
+  )
+  const [endDate, setEndDate] = useState(announcement?.end_date ?? today)
+  const [isActive, setIsActive] = useState(announcement?.is_active ?? true)
+  const [priority, setPriority] = useState(announcement?.priority ?? 0)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Set default date = today
-  // Default start_time = 2 min from now
-  useEffect(() => {
-    const now = dtNowLocale()
+  const values = (): AnnouncementInput => ({
+    title,
+    message,
+    image_url: announcement?.image_url ?? null,
+    start_date: startDate,
+    end_date: endDate,
+    is_active: isActive,
+    priority,
+  })
 
-    // Date YYYY-MM-DD
-    setDate(now.format('YYYY-MM-DD'))
-    setStartTime(now.format('HH:mm'))
-  }, [])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const announcement: AnnouncementData = {
-      date,
-      start_time: startTime,
-      end_time: dtLocale(`${date} ${startTime}`).
-        add(duration, 'minutes').
-        format('HH:mm'),
-      message,
-      car_reg_number: type === 'Car' ? carReg : "",
-    }
-
-    // Perform your API POST or upload here...
-
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
     setIsLoading(true)
+    setError(null)
     try {
-      await createAnnouncement(announcement)
-      onComplete(announcement)
-    } catch(error) {
-      setError(`Error creating announcement: ${error}`)
+      const saved = announcement
+        ? await updateAnnouncementAction(announcement.id, values())
+        : await createAnnouncementAction(values())
+      onComplete(saved)
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Save failed")
     } finally {
-        setIsLoading(false)
+      setIsLoading(false)
     }
-
   }
 
+  const inputClasses =
+    "mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-mosqueBrand-primary focus:ring-2 focus:ring-mosqueBrand-primary/20"
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-6 w-full max-w-lg mx-auto p-6"
-    >
-      {/* Type Selector */}
+    <form onSubmit={handleSubmit} className="space-y-5 p-4 sm:p-6">
       <div>
-        <label className="block text-sm font-medium mb-1">
-          Announcement Type
-        </label>
-        <select
-          className="w-full rounded-xl border border-slate-300 px-4 py-2 text-sm bg-slate-50 focus:ring-2 focus:ring-mosqueBrand-onPrimary focus:border-mosqueBrand-onPrimary outline-none"
-          value={type}
-          onChange={(e) => setType(e.target.value as any)}
-          disabled={isLoading}
-        >
-          <option value="General">General</option>
-          <option value="Car">Car</option>
-        </select>
-      </div>
-
-      {/* Date */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Date</label>
-        <input
-          type="date"
-          className="w-full rounded-xl border border-slate-300 px-4 py-2 text-sm bg-slate-50 focus:ring-2 focus:ring-mosqueBrand-onPrimary outline-none"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          disabled={isLoading}
-        />
-      </div>
-
-      {/* Start Time */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Start Time</label>
-        <input
-          type="time"
-          className="w-full rounded-xl border border-slate-300 px-4 py-2 text-sm bg-slate-50 focus:ring-2 focus:ring-mosqueBrand-onPrimary outline-none"
-          value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
-          disabled={isLoading}
-        />
-      </div>
-
-      {/* Duration */}
-      <div>
-        <label className="block text-sm font-medium mb-1">
-          Duration (minutes)
+        <label htmlFor="announcement-title" className="text-sm font-medium text-slate-800">
+          Title
         </label>
         <input
-          type="number"
-          min={1}
-          className="w-full rounded-xl border border-slate-300 px-4 py-2 text-sm bg-slate-50 focus:ring-2 focus:ring-mosqueBrand-onPrimary outline-none"
-          value={duration}
-          onChange={(e) => setDuration(Number(e.target.value))}
-          disabled={isLoading}
+          id="announcement-title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          className={inputClasses}
+          maxLength={120}
           required
+          disabled={isLoading}
         />
       </div>
 
-      {/* Car Reg Number (only if Car announcement) */}
-      {type === "Car" && (
+      <div>
+        <label htmlFor="announcement-message" className="text-sm font-medium text-slate-800">
+          Message
+        </label>
+        <textarea
+          id="announcement-message"
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          className={inputClasses}
+          rows={5}
+          maxLength={600}
+          required
+          disabled={isLoading}
+        />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Car Registration Number
+          <label htmlFor="announcement-start" className="text-sm font-medium text-slate-800">
+            Start date
           </label>
           <input
-            type="text"
-            placeholder=""
-            className="w-full rounded-xl border border-slate-300 px-4 py-2 text-sm bg-slate-50 focus:ring-2 focus:ring-mosqueBrand-onPrimary outline-none"
-            value={carReg}
-            onChange={(e) => setCarReg(e.target.value)}
+            id="announcement-start"
+            type="date"
+            value={startDate}
+            onChange={(event) => setStartDate(event.target.value)}
+            className={inputClasses}
+            required
             disabled={isLoading}
           />
         </div>
-      )}
-
-      {/* Message */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Message</label>
-        <textarea
-          rows={3}
-          className="w-full rounded-xl border border-slate-300 px-4 py-2 text-sm bg-slate-50 focus:ring-2 focus:ring-mosqueBrand-onPrimary outline-none"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          disabled={isLoading}
-          required
-        />
+        <div>
+          <label htmlFor="announcement-end" className="text-sm font-medium text-slate-800">
+            End date
+          </label>
+          <input
+            id="announcement-end"
+            type="date"
+            min={startDate}
+            value={endDate}
+            onChange={(event) => setEndDate(event.target.value)}
+            className={inputClasses}
+            required
+            disabled={isLoading}
+          />
+        </div>
       </div>
 
-      {error && <p className="text-red-500">{error}</p>}
+      <div className="grid gap-4 sm:grid-cols-2 sm:items-end">
+        <div>
+          <label htmlFor="announcement-priority" className="text-sm font-medium text-slate-800">
+            Priority
+          </label>
+          <input
+            id="announcement-priority"
+            type="number"
+            min={0}
+            max={999}
+            step={1}
+            value={priority}
+            onChange={(event) => setPriority(Number(event.target.value))}
+            className={inputClasses}
+            required
+            disabled={isLoading}
+          />
+          <p className="mt-1 text-xs text-slate-500">Higher numbers show first.</p>
+        </div>
+        <label className="flex min-h-11 items-center gap-3 rounded-lg border border-slate-300 px-3 py-2.5 text-sm font-medium text-slate-800">
+          <input
+            type="checkbox"
+            checked={isActive}
+            onChange={(event) => setIsActive(event.target.checked)}
+            disabled={isLoading}
+            className="h-4 w-4 accent-mosqueBrand-primary"
+          />
+          Active
+        </label>
+      </div>
 
-      {isLoading ? (
-        <Spinner className={"text-mosqueBrand-highlight"} />
-      ) : (
+      {error && (
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
+      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:justify-end">
+        <button
+          type="button"
+          onClick={() => onPreview(values())}
+          disabled={isLoading || title.trim() === "" || message.trim() === ""}
+          className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+        >
+          Preview
+        </button>
         <button
           type="submit"
-          className="w-full rounded-xl bg-mosqueBrand-onPrimary px-4 py-3 text-sm font-semibold text-mosqueBrand-primary hover:bg-mosqueBrand-onPrimary/90 transition-all"
           disabled={isLoading}
+          className="inline-flex min-w-36 items-center justify-center rounded-lg bg-mosqueBrand-primary px-4 py-2.5 text-sm font-semibold text-mosqueBrand-onPrimary hover:bg-mosqueBrand-primary/90 disabled:opacity-50"
         >
-          Submit Announcement
+          {isLoading ? <Spinner className="text-current" /> : "Save announcement"}
         </button>
-      )}
+      </div>
     </form>
   )
 }

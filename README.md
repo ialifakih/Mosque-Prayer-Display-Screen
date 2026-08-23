@@ -202,7 +202,26 @@ You'll also need to set a username and password for authentication, these will a
 ```
 AUTH_USERNAME=myuser
 AUTH_PASSWORD=secret
+ADMIN_ALLOWED_EMAILS=admin@example.com
 ```
+
+Google OAuth is optional. When enabled with `AUTH_GOOGLE_CLIENT_ID` and
+`AUTH_GOOGLE_CLIENT_SECRET`, only emails listed in the comma-separated
+`ADMIN_ALLOWED_EMAILS` value can enter the admin area.
+
+### Announcements worksheet
+
+The first announcement created by an administrator creates an `Announcements`
+worksheet when one does not exist. Its header row is:
+
+```text
+id,title,message,image_url,start_date,end_date,is_active,priority,created_at,updated_at
+```
+
+Dates use `YYYY-MM-DD`. `is_active` is a boolean and `priority` is a whole
+number; higher priorities display first. The legacy `Configuration`
+`announcement.*` values remain read-only and are used only while the dedicated
+worksheet has no rows.
 
 ### Step 4. Share "editor" access to the spreadsheet with your new service account
 
@@ -238,6 +257,7 @@ If you want to update your domain, you can do so by following the Vercel documen
 | AUTH_USERNAME               | myuser                                                                           | myuser                          | Required as part of Admin interface to login to admin page                      |
 | AUTH_PASSWORD               | secret                                                                           | secret                          | Required as part of Admin interface to login to admin page                      |
 | AUTH_SECRET                 |                                                                                  |                                 | Required as part of Admin interface to encrypt auth JWT token                   |
+| ADMIN_ALLOWED_EMAILS        | admin@example.com                                                                |                                 | Comma-separated Google accounts allowed to enter the admin area                 |
 
 ## Dev set up
 

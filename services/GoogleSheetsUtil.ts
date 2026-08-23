@@ -1,8 +1,22 @@
 import { DailyPrayerTime } from '@/types/DailyPrayerTimeType'
+import type { AnnouncementRecord } from "@/types/AnnouncementType"
 import { dtMonthNumToFullMonth } from "@/lib/datetimeUtils"
 
 const ADMIN_GOOGLE_SA_PRIVATE_KEY = process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY
 const ADMIN_GOOGLE_SA_EMAIL = process.env.ADMIN_GOOGLE_SA_EMAIL
+
+export const ANNOUNCEMENT_SHEET_HEADERS = [
+  "id",
+  "title",
+  "message",
+  "image_url",
+  "start_date",
+  "end_date",
+  "is_active",
+  "priority",
+  "created_at",
+  "updated_at",
+] as const
 
 export function isSheetsClientEnabled(): boolean {
   return !(!ADMIN_GOOGLE_SA_EMAIL || !ADMIN_GOOGLE_SA_PRIVATE_KEY)
@@ -163,5 +177,39 @@ export function prayerTimeValuesToPrayerTimesJsonSchema (values: any[][] | null 
     })
 
     return obj as DailyPrayerTime
+  })
+}
+
+export function announcementValuesToRecords(
+  values: unknown[][] = [],
+): AnnouncementRecord[] {
+  return sheetsUtilValuesToJson(values as any[][])
+    .filter((row) => String(row.id ?? "").trim().length > 0)
+    .map((row) => ({
+      id: String(row.id),
+      title: String(row.title ?? ""),
+      message: String(row.message ?? ""),
+      image_url: String(row.image_url ?? "").trim() || null,
+      start_date: String(row.start_date ?? ""),
+      end_date: String(row.end_date ?? ""),
+      is_active:
+        row.is_active === true ||
+        row.is_active === 1 ||
+        String(row.is_active).toLowerCase() === "true" ||
+        String(row.is_active) === "1",
+      priority: Number.isFinite(Number(row.priority))
+        ? Number(row.priority)
+        : 0,
+      created_at: String(row.created_at ?? ""),
+      updated_at: String(row.updated_at ?? ""),
+    }))
+}
+
+export function announcementRecordToRow(
+  announcement: AnnouncementRecord,
+): Array<string | number | boolean> {
+  return ANNOUNCEMENT_SHEET_HEADERS.map((header) => {
+    if (header === "image_url") return announcement.image_url ?? ""
+    return announcement[header]
   })
 }

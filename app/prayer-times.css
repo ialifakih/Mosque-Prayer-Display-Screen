@@ -9,7 +9,7 @@
   .prayer-display-header-date,
   .prayer-display-header-clock,
   .prayer-display-header-mosque {
-    @apply flex items-center justify-center;
+    @apply flex min-w-0 items-center justify-center;
   }
 
   .display-date {
@@ -192,7 +192,15 @@
   }
 
   .announcement-space {
-    @apply mt-4 flex-1 border-t border-mosqueBrand-highlight/50;
+    @apply mt-3 flex min-h-0 flex-1 items-center border-t border-mosqueBrand-highlight/50 pt-3;
+  }
+
+  .announcement-rotator {
+    @apply flex w-full min-w-0 items-center gap-5;
+  }
+
+  .announcement-position {
+    @apply flex-none text-sm font-semibold tabular-nums text-[#9a7520];
   }
 
   @media (min-width: 768px) {
@@ -343,4 +351,5 @@
     .announcement-heading h2 {
       @apply text-2xl;
     }
+
   }

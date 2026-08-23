@@ -27,6 +27,7 @@ export function Modal({
   size = "md",
 }: ModalProps) {
   const [mounted, setMounted] = React.useState(false);
+  const titleId = React.useId();
 
   useEffect(() => {
     setMounted(true);
@@ -52,7 +53,7 @@ export function Modal({
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm"
       aria-modal="true"
       role="dialog"
-      aria-labelledby={title ? "modal-title" : undefined}
+      aria-labelledby={title ? titleId : undefined}
       // onClick={onClose} // click on backdrop closes
     >
       <div
@@ -63,7 +64,7 @@ export function Modal({
           <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 ">
             {title && (
               <h2
-                id="modal-title"
+                id={titleId}
                 className="text-base font-semibold text-slate-900 "
               >
                 {title}

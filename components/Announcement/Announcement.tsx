@@ -1,69 +1,72 @@
-'use client'
+"use client"
 
-import type { AnnouncementData } from '@/types/AnnouncementType'
+import { AnnouncementCard } from "@/components/Announcement/AnnouncementCard"
+import type {
+  AnnouncementRecord,
+  PublicAnnouncementsResponse,
+} from "@/types/AnnouncementType"
 import { useEffect, useState } from "react"
-import AnnouncementModal from '@/components/Announcement/AnnouncementModal'
 
-export default function Announcement () {
-  const [nextAnnouncement, setNextAnnouncement] = useState<AnnouncementData | null>(
-    null)
+const ROTATION_INTERVAL_MS = 13_000
+const REFRESH_INTERVAL_MS = 60_000
 
-  function fetchAnnouncement () {
-    fetch(`/api/data/announcements?no_cache=${Date.now()}`)
-      .then((response) => response.json())
-      .then(({ announcement }) => {
-        setNextAnnouncement(announcement)
-      })
-      .catch((error) => {
-        console.error(`error fetching announcements: ${error}`)
-      })
-  }
+export default function Announcement() {
+  const [announcements, setAnnouncements] = useState<AnnouncementRecord[]>([])
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
-    fetchAnnouncement()
-    const interval = setInterval(() => {
-      fetchAnnouncement()
-    }, 60000) // every 60 seconds
-    return () => clearInterval(interval)
+    let cancelled = false
+
+    const refresh = async () => {
+      try {
+        const response = await fetch(
+          `/api/data/announcements?no_cache=${Date.now()}`,
+          { cache: "no-store" },
+        )
+        if (!response.ok) throw new Error(`Request failed: ${response.status}`)
+        const data = (await response.json()) as PublicAnnouncementsResponse
+        if (!cancelled) {
+          setAnnouncements(
+            Array.isArray(data.announcements) ? data.announcements : [],
+          )
+          setCurrentIndex(0)
+        }
+      } catch (error) {
+        console.error(`Error fetching announcements: ${error}`)
+      }
+    }
+
+    void refresh()
+    const refreshInterval = window.setInterval(refresh, REFRESH_INTERVAL_MS)
+    return () => {
+      cancelled = true
+      window.clearInterval(refreshInterval)
+    }
   }, [])
 
-  return (
-    <div className="hidden md:block">
-      <AnnouncementModal isOpen={nextAnnouncement?.is_visible ?? false}>
-        <div className=" text-white h-full w-full flex-1 flex flex-col items-center justify-center gap-10 mt-2">
-          <div
-            id="text-announcement"
-            className={`w-full h-[50vh] max-w-xl md:max-w-full lg:max-w-6xl
-          bg-mosqueBrand-onPrimary text-black rounded-2xl lg:rounded-4xl
-          flex flex-col items-center justify-start p-4
-        `}
-          >
-            {nextAnnouncement?.car_reg_number != null &&
-            nextAnnouncement.car_reg_number.length > 0 ? (
-              <div
-                id="car-reg-view"
-                className="flex items-center justify-center bg-yellow-400 text-black border-2 border-black rounded-2xl lg:rounded-4xl
-              p-4 px-2 mx-4 font-bold tracking-wider mb-6 uppercase text-center
-              aspect-[10/3] w-full max-h-[30vh] max-w-xl md:max-w-xl lg:max-w-4xl"
-              >
-                <div className="text-5xl md:text-8xl lg:text-[10rem]">
-                  {nextAnnouncement.car_reg_number}
-                </div>
-              </div>
-            ) : (
-              <div className="font-bold text-4xl md:text-5xl lg:text-7xl ">
-                Announcement
-              </div>
-            )}
+  useEffect(() => {
+    if (announcements.length < 2) return
 
-            <div className="text-center flex flex-1 justify-center items-center">
-              <p className="flex-1 leading-none text-[clamp(2em,4vh,5em)]">
-                {nextAnnouncement?.message}
-              </p>
-            </div>
-          </div>
-        </div>
-      </AnnouncementModal>
+    const rotationInterval = window.setInterval(() => {
+      setCurrentIndex((index) => (index + 1) % announcements.length)
+    }, ROTATION_INTERVAL_MS)
+    return () => window.clearInterval(rotationInterval)
+  }, [announcements.length])
+
+  const announcement = announcements[currentIndex]
+  if (announcement == null) return null
+
+  return (
+    <div aria-live="polite" className="announcement-rotator">
+      <AnnouncementCard announcement={announcement} />
+      {announcements.length > 1 && (
+        <p
+          className="announcement-position"
+          aria-label={`Announcement ${currentIndex + 1} of ${announcements.length}`}
+        >
+          {currentIndex + 1} / {announcements.length}
+        </p>
+      )}
     </div>
   )
 }

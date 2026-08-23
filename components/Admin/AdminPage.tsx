@@ -3,11 +3,16 @@ import AddAnnouncement
   from '@/components/Admin/Announcement/AddAnnouncement'
 import EmbedTodayPrayerTimes
   from "@/components/Admin/Embed/EmbedTodayPrayerTimes/EmbedTodayPrayerTimes"
+import type { AnnouncementRecord } from "@/types/AnnouncementType"
 
 export default function AdminPage ({
   metadata,
+  announcements,
+  today,
 }: {
   metadata: MosqueMetadataType
+  announcements: AnnouncementRecord[]
+  today: string
 }) {
 
   return (
@@ -26,9 +31,14 @@ export default function AdminPage ({
         </div>
       </div>
 
-      <div className="py-10 px-4 sm:px-6 lg:px-8 bg-white flex flex-row flex-wrap justify-center items-start gap-6">
-        <AddAnnouncement/>
-        <EmbedTodayPrayerTimes/>
+      <div className="flex flex-col items-center gap-6 bg-white px-4 py-10 sm:px-6 lg:px-8">
+        <AddAnnouncement
+          initialAnnouncements={announcements}
+          today={today}
+        />
+        <div className="flex w-full max-w-6xl justify-center">
+          <EmbedTodayPrayerTimes/>
+        </div>
       </div>
 
     </div>

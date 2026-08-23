@@ -9,10 +9,7 @@ import {
 } from '@/types/MosqueDataType'
 import { AnnouncementData } from '@/types/AnnouncementType'
 import { find } from 'lodash'
-import {
-  sheetsGetMosqueData,
-  sheetsUpdateAnnouncement,
-} from '@/services/GoogleSheetsService'
+import { sheetsGetMosqueData } from '@/services/GoogleSheetsService'
 import { CalendarPrintMonthlyPrayerTimes } from '@/types/CalendarPrintType'
 import deepmerge from 'deepmerge'
 import {
@@ -22,6 +19,7 @@ import { configurationDefaults } from '@/config/ConfigurationDefaults'
 import { unflattenObject } from "@/lib/unflattenObject"
 import { isSheetsClientEnabled } from "@/services/GoogleSheetsUtil"
 import { dtLocale, dtNowLocale } from "@/lib/datetimeUtils"
+import { getEligibleLegacyAnnouncement } from "@/services/AnnouncementService"
 
 
 const MOSQUE_API_ENDPOINT = process.env.MOSQUE_API_ENDPOINT ?? ''
@@ -157,25 +155,8 @@ export async function getAnnouncement (): Promise<AnnouncementData | null> {
     return null
   }
 
-  const now = dtNowLocale()
-  const announcementStart = dtLocale(
-    `${announcement.date} ${announcement.start_time}`,
-    'YYYY-MM-DD HH:mm',
-  )
-  const announcementEnd = dtLocale(
-    `${announcement.date} ${announcement.end_time}`,
-    'YYYY-MM-DD HH:mm',
-  )
-
-  announcement.is_visible = (
-    now.isSame(announcementStart, 'day')
-    && now.isSameOrAfter(announcementStart, 'minute')
-    && now.isBefore(announcementEnd, 'minute')
-  )
+  announcement.is_visible =
+    getEligibleLegacyAnnouncement(announcement, dtNowLocale()) != null
 
   return announcement
-}
-
-export async function createAnnouncement (announcement: AnnouncementData): Promise<void> {
-  await sheetsUpdateAnnouncement(announcement)
 }

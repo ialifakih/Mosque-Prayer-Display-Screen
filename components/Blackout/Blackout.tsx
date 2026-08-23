@@ -3,7 +3,6 @@
 import { isBlackout } from "@/services/PrayerTimeService"
 import { DailyPrayerTime } from "@/types/DailyPrayerTimeType"
 import { useEffect, useState } from "react"
-import Clock from "../Clock/Clock"
 
 export default function Blackout({
   prayerTimeToday,
@@ -21,10 +20,11 @@ export default function Blackout({
   }, [setBlackout, prayerTimeToday])
 
   return (
-    <div className="hidden md:block">
-      {blackout ? (
-        <div className="fixed inset-0 bg-black bg-opacity-80 transition-opacity"></div>
-      ) : null}
-    </div>
+    blackout ? (
+      <div
+        data-testid="blackout-overlay"
+        className="fixed inset-0 z-[10000] bg-black bg-opacity-80 transition-opacity"
+      />
+    ) : null
   )
 }

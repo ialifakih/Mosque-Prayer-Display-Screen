@@ -16,7 +16,6 @@ import type { JummahTimes } from "@/types/JummahTimesType"
 import type { MosqueMetadataType } from "@/types/MosqueDataType"
 import type { Metadata } from "next"
 import "./prayer-times.css"
-import Announcement from "@/components/Announcement/Announcement"
 import { ConfigurationJson } from "@/types/ConfigurationType"
 import { ConfigurationProvider } from "@/providers/ConfigurationProvider"
 import { getPublicMosqueMetadata } from "@/lib/publicMosqueMetadata"
@@ -57,9 +56,9 @@ export default async function Home() {
           today={today}
           tomorrow={tomorrow}
           jummahTimes={jummahTimes}
+          announcementEnabled={config.feature.announcement.enabled}
         />
         <ServiceWorker />
-        {config.feature.announcement.enabled && <Announcement />}
         <Blackout prayerTimeToday={today} />
       </div>
     </ConfigurationProvider>

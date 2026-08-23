@@ -1,10 +1,12 @@
-"use server"
+import "server-only"
 
-import { AnnouncementData } from "@/types/AnnouncementType"
+import type { AnnouncementRecord } from "@/types/AnnouncementType"
 import { google, sheets_v4 } from "googleapis"
 import {
   prayerTimeValuesToPrayerTimesJsonSchema,
-  sheetsUtilFlattenedJsonToRows,
+  ANNOUNCEMENT_SHEET_HEADERS,
+  announcementRecordToRow,
+  announcementValuesToRecords,
   sheetsUtilValuesToJson,
   sheetsUtilValuesToNestedJson,
 } from "@/services/GoogleSheetsUtil"
@@ -15,7 +17,6 @@ import { MosqueData, MosqueMetadataType } from "@/types/MosqueDataType"
 import { DailyPrayerTime } from "@/types/DailyPrayerTimeType"
 import { JummahTimes } from "@/types/JummahTimesType"
 import { unstable_cache } from "next/cache"
-import { dtNowLocale } from "@/lib/datetimeUtils"
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID ?? ""
 const ADMIN_GOOGLE_SA_PRIVATE_KEY = process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY
@@ -26,6 +27,7 @@ const SHEET_NAMES = {
   JummahTimes: "JummahTimes",
   Metadata: "Metadata",
   Configuration: "Configuration",
+  Announcements: "Announcements",
 }
 
 let sheetsClient: sheets_v4.Sheets | null = null
@@ -188,41 +190,163 @@ export async function sheetsGetConfigurationData(): Promise<ConfigurationJson> {
   return sheetsGetConfigurationDataCached()
 }
 
-export async function sheetsGetAnnouncement(): Promise<AnnouncementData | null> {
-  const data = await sheetsGetConfigurationData()
-  let announcement = (data?.announcement as unknown as AnnouncementData) ?? null
-
-  const now = dtNowLocale()
-  announcement.is_visible =
-    now.isSame(announcement?.date, "day") &&
-    now.isSameOrAfter(
-      `${announcement?.date} ${announcement?.start_time}`,
-      "minutes",
-    ) &&
-    now.isBefore(`${announcement?.date} ${announcement?.end_time}`, "minutes")
-  return announcement
+function isMissingAnnouncementsWorksheet(error: any): boolean {
+  const message = String(error?.message ?? "").toLowerCase()
+  return (
+    Number(error?.code) === 400 &&
+    (message.includes("unable to parse range") ||
+      message.includes("requested entity was not found"))
+  )
 }
 
-export async function sheetsUpdateAnnouncement(
-  announcement: AnnouncementData,
-): Promise<void> {
-  const data = await sheetsGetConfigurationData()
-  data.announcement = announcement
-  await sheetsUpdateConfigurationData(data)
-}
-
-export async function sheetsUpdateConfigurationData(
-  data: ConfigurationJson,
-): Promise<void> {
+async function getAnnouncementSheetValues(): Promise<unknown[][]> {
   const sheets = await getUserSheetsClient()
-  // We need to convert the data from JSON to rows for the Google Sheets API
-  const rows = sheetsUtilFlattenedJsonToRows(data)
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: SHEET_NAMES.Announcements,
+  })
+  return response.data.values ?? []
+}
+
+export async function sheetsGetAnnouncements(): Promise<AnnouncementRecord[]> {
+  try {
+    return announcementValuesToRecords(await getAnnouncementSheetValues())
+  } catch (error: any) {
+    if (isMissingAnnouncementsWorksheet(error)) {
+      return []
+    }
+    throw new Error(`Google Sheets API request failed: ${error?.message}`)
+  }
+}
+
+async function ensureAnnouncementsWorksheet(): Promise<void> {
+  const sheets = await getUserSheetsClient()
+  const spreadsheet = await sheets.spreadsheets.get({
+    spreadsheetId: SPREADSHEET_ID,
+    fields: "sheets.properties",
+  })
+  const worksheet = spreadsheet.data.sheets?.find(
+    ({ properties }) => properties?.title === SHEET_NAMES.Announcements,
+  )
+
+  if (worksheet == null) {
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: SPREADSHEET_ID,
+      requestBody: {
+        requests: [
+          {
+            addSheet: {
+              properties: { title: SHEET_NAMES.Announcements },
+            },
+          },
+        ],
+      },
+    })
+  }
+
+  const headerResponse = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: `${SHEET_NAMES.Announcements}!1:1`,
+  })
+  const existingHeaders = headerResponse.data.values?.[0] ?? []
+
+  if (existingHeaders.length === 0) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_NAMES.Announcements}!A1:J1`,
+      valueInputOption: "RAW",
+      requestBody: { values: [[...ANNOUNCEMENT_SHEET_HEADERS]] },
+    })
+    return
+  }
+
+  if (
+    existingHeaders.join("|") !== ANNOUNCEMENT_SHEET_HEADERS.join("|")
+  ) {
+    throw new Error(
+      `Announcements worksheet headers must be: ${ANNOUNCEMENT_SHEET_HEADERS.join(", ")}`,
+    )
+  }
+}
+
+export async function sheetsCreateAnnouncement(
+  announcement: AnnouncementRecord,
+): Promise<void> {
+  await ensureAnnouncementsWorksheet()
+  const sheets = await getUserSheetsClient()
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: SPREADSHEET_ID,
+    range: `${SHEET_NAMES.Announcements}!A:J`,
+    valueInputOption: "RAW",
+    insertDataOption: "INSERT_ROWS",
+    requestBody: { values: [announcementRecordToRow(announcement)] },
+  })
+}
+async function getAnnouncementRow(
+  id: string,
+): Promise<{ rowIndex: number }> {
+  const values = await getAnnouncementSheetValues()
+  const idColumn = values[0]?.findIndex((header) => header === "id") ?? -1
+  const rowIndex = values
+    .slice(1)
+    .findIndex((row) => String(row[idColumn] ?? "") === id)
+
+  if (idColumn < 0 || rowIndex < 0) {
+    throw new Error(`Announcement not found: ${id}`)
+  }
+
+  return { rowIndex: rowIndex + 1 }
+}
+
+export async function sheetsUpdateAnnouncementRecord(
+  announcement: AnnouncementRecord,
+): Promise<void> {
+  await ensureAnnouncementsWorksheet()
+  const { rowIndex } = await getAnnouncementRow(announcement.id)
+  const sheets = await getUserSheetsClient()
+  const rowNumber = rowIndex + 1
+
   await sheets.spreadsheets.values.update({
     spreadsheetId: SPREADSHEET_ID,
-    range: SHEET_NAMES.Configuration,
-    valueInputOption: "USER_ENTERED",
+    range: `${SHEET_NAMES.Announcements}!A${rowNumber}:J${rowNumber}`,
+    valueInputOption: "RAW",
+    requestBody: { values: [announcementRecordToRow(announcement)] },
+  })
+}
+
+export async function sheetsDeleteAnnouncement(id: string): Promise<void> {
+  await ensureAnnouncementsWorksheet()
+  const { rowIndex } = await getAnnouncementRow(id)
+  const sheets = await getUserSheetsClient()
+  const spreadsheet = await sheets.spreadsheets.get({
+    spreadsheetId: SPREADSHEET_ID,
+    fields: "sheets.properties",
+  })
+  const sheetId = spreadsheet.data.sheets?.find(
+    ({ properties }) => properties?.title === SHEET_NAMES.Announcements,
+  )?.properties?.sheetId
+
+  if (sheetId == null) {
+    throw new Error("Announcements worksheet was not found")
+  }
+
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId: SPREADSHEET_ID,
     requestBody: {
-      values: rows,
+      requests: [
+        {
+          deleteDimension: {
+            range: {
+              sheetId,
+              dimension: "ROWS",
+              startIndex: rowIndex,
+              endIndex: rowIndex + 1,
+            },
+          },
+        },
+      ],
     },
   })
 }
+
+// Legacy Configuration announcement values are intentionally read-only.

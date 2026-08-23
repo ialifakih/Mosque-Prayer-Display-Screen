@@ -12,6 +12,7 @@ import {
 } from "@/services/PrayerTimeService"
 import type { DailyPrayerTime } from "@/types/DailyPrayerTimeType"
 import type { JummahTimes } from "@/types/JummahTimesType"
+import Announcement from "@/components/Announcement/Announcement"
 
 const PRAYER_NAMES = [
   "Fajr الفجر",
@@ -64,10 +65,12 @@ export default function PrayerDisplay({
   today,
   tomorrow,
   jummahTimes,
+  announcementEnabled,
 }: {
   today: DailyPrayerTime
   tomorrow: DailyPrayerTime
   jummahTimes: JummahTimes
+  announcementEnabled: boolean
 }) {
   const prayers = useMemo<PrayerDisplayRow[]>(
     () => [
@@ -151,7 +154,9 @@ export default function PrayerDisplay({
             <span className="announcement-mark" aria-hidden="true" />
             <h2>Tangazo / Announcement</h2>
           </div>
-          <div className="announcement-space" aria-hidden="true" />
+          <div className="announcement-space">
+            {announcementEnabled && <Announcement />}
+          </div>
         </section>
       </div>
     </main>
