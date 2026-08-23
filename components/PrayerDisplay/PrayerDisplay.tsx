@@ -22,6 +22,12 @@ const PRAYER_NAMES = [
   "Isha العشاء",
 ]
 
+const FEATURED_HADITH = {
+  arabic: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ",
+  swahili: "Hakika matendo yanategemea nia.",
+  source: "Sahih al-Bukhari 1",
+}
+
 function formatCountdown(totalSeconds: number) {
   const hours = Math.floor(totalSeconds / 3600)
   const minutes = Math.floor((totalSeconds % 3600) / 60)
@@ -134,7 +140,10 @@ export default function PrayerDisplay({
         </section>
 
         <section className="jummah-card" aria-label="Swala ya Ijumaa">
-          <p>Swala ya Ijumaa</p>
+          <div className="jummah-label">
+            <span>Swala ya Ijumaa</span>
+            <small>صلاة الجمعة</small>
+          </div>
           <time className="tabular-nums">
             {jummahTime ? dtFormatTimeTo12h(jummahTime) : "—"}
           </time>
@@ -143,21 +152,32 @@ export default function PrayerDisplay({
 
       <div className="prayer-display-content">
         <section className="prayer-table-panel" aria-label="Nyakati za sala">
-          <PrayerTimes
-            prayers={prayers}
-            nextPrayerTime={nextPrayerTime}
-          />
+          <PrayerTimes prayers={prayers} nextPrayerTime={nextPrayerTime} />
         </section>
 
-        <section className="announcement-panel" aria-label="Matangazo">
-          <div className="announcement-heading">
-            <span className="announcement-mark" aria-hidden="true" />
-            <h2>Tangazo</h2>
-          </div>
-          <div className="announcement-space">
-            {announcementEnabled && <Announcement />}
-          </div>
-        </section>
+        <div className="display-bottom-grid">
+          <section className="announcement-panel" aria-label="Matangazo">
+            <div className="announcement-heading">
+              <span className="announcement-mark" aria-hidden="true" />
+              <h2>Tangazo</h2>
+            </div>
+            <div className="announcement-space">
+              {announcementEnabled && <Announcement />}
+            </div>
+          </section>
+
+          <section className="hadith-card" aria-label="Hadith ya siku">
+            <div className="hadith-heading">
+              <span>Hadith ya siku</span>
+              <small>حديث اليوم</small>
+            </div>
+            <blockquote>
+              <p className="hadith-arabic" dir="rtl">{FEATURED_HADITH.arabic}</p>
+              <p className="hadith-swahili">“{FEATURED_HADITH.swahili}”</p>
+            </blockquote>
+            <p className="hadith-source">{FEATURED_HADITH.source}</p>
+          </section>
+        </div>
       </div>
     </main>
   )
