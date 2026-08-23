@@ -22,25 +22,58 @@ import { dtLocale, dtNowLocale } from "@/lib/datetimeUtils"
 import { getEligibleLegacyAnnouncement } from "@/services/AnnouncementService"
 
 
-const MOSQUE_API_ENDPOINT = process.env.MOSQUE_API_ENDPOINT ?? ''
 const DAY_FOR_UPCOMING = parseInt(process.env?.UPCOMING_PRAYER_DAY ?? '3')
-const useSheetsClient = isSheetsClientEnabled()
+
+function hasPrayerTimes(data: MosqueData): boolean {
+  return Array.isArray(data.prayer_times) && data.prayer_times.length > 0
+}
+
+async function getMosqueDataFromApi(): Promise<MosqueData> {
+  const endpoint = process.env.MOSQUE_API_ENDPOINT?.trim()
+
+  if (!endpoint) {
+    throw new Error("MOSQUE_API_ENDPOINT has not been set")
+  }
+
+  const response = await fetch(endpoint, {
+    next: { revalidate: 30 },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Mosque API request failed with status ${response.status}`)
+  }
+
+  const data = await response.json()
+  data.config = unflattenObject(data.config)
+
+  if (!hasPrayerTimes(data)) {
+    throw new Error("Mosque API returned no prayer times")
+  }
+
+  return data
+}
 
 export async function getMosqueData (): Promise<MosqueData> {
-  if (useSheetsClient) {
-    return await sheetsGetMosqueData()
-  } else {
-    const response = await fetch(MOSQUE_API_ENDPOINT, {
-      next: { revalidate: 30 },
-    })
+  if (isSheetsClientEnabled()) {
+    try {
+      const sheetsData = await sheetsGetMosqueData()
 
-    const data = await response.json()
+      if (hasPrayerTimes(sheetsData)) {
+        return sheetsData
+      }
 
-    // we do this so that the MosqueData type doesn't is strongly typed
-    data.config = unflattenObject(data.config)
-
-    return data
+      console.error(
+        "Google Sheets returned no prayer times; falling back to MOSQUE_API_ENDPOINT",
+      )
+    } catch (error) {
+      console.error(
+        "Google Sheets unavailable; falling back to MOSQUE_API_ENDPOINT",
+        error,
+      )
+    }
   }
+
+  return getMosqueDataFromApi()
 }
 
 export async function getPrayerTimeForDayMonth (
@@ -103,7 +136,6 @@ export async function getCalendarPrintMonthlyPrayerTimesForYear (year: string): 
       })
     }
 
-    // We want to validate the date as we are generating the calendar, this will avoid leap year issues and other date validation issues
     const date = dtLocale(
       `${year}-${prayer_time.month}-${prayer_time.day_of_month}`,
       "YYYY-M-D",
