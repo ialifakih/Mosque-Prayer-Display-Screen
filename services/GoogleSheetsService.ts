@@ -77,24 +77,7 @@ function getServiceAccountCredentials(): ServiceAccountCredentials {
   }
 }
 
-export function logGoogleSheetsRuntimeDiagnostics(): void {
-  console.info({
-    hasGoogleServiceAccountJson: Boolean(
-      process.env.ADMIN_GOOGLE_SERVICE_ACCOUNT_JSON,
-    ),
-    hasLegacyAdminGoogleSaEmail: Boolean(process.env.ADMIN_GOOGLE_SA_EMAIL),
-    hasLegacyAdminGoogleSaPrivateKey: Boolean(
-      process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY,
-    ),
-    hasSpreadsheetId: Boolean(process.env.SPREADSHEET_ID),
-    hasAuthSecret: Boolean(process.env.AUTH_SECRET),
-    vercelCommitSha: process.env.VERCEL_GIT_COMMIT_SHA,
-  })
-}
-
 export async function getUserSheetsClient() {
-  logGoogleSheetsRuntimeDiagnostics()
-
   if (sheetsClient) return sheetsClient
 
   const credentials = getServiceAccountCredentials()
