@@ -28,7 +28,21 @@ const SHEET_NAMES = {
 
 let sheetsClient: sheets_v4.Sheets | null = null
 
+export function logGoogleSheetsRuntimeDiagnostics(): void {
+  console.info({
+    hasAdminGoogleSaEmail: Boolean(process.env.ADMIN_GOOGLE_SA_EMAIL),
+    hasAdminGoogleSaPrivateKey: Boolean(
+      process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY,
+    ),
+    hasSpreadsheetId: Boolean(process.env.SPREADSHEET_ID),
+    hasAuthSecret: Boolean(process.env.AUTH_SECRET),
+    vercelCommitSha: process.env.VERCEL_GIT_COMMIT_SHA,
+  })
+}
+
 export async function getUserSheetsClient() {
+  logGoogleSheetsRuntimeDiagnostics()
+
   const serviceAccountEmail = process.env.ADMIN_GOOGLE_SA_EMAIL
   const serviceAccountPrivateKey = process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY
 

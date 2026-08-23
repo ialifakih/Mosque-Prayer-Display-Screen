@@ -4,6 +4,8 @@ const ENVIRONMENT_KEYS = [
   "ADMIN_GOOGLE_SA_EMAIL",
   "ADMIN_GOOGLE_SA_PRIVATE_KEY",
   "SPREADSHEET_ID",
+  "AUTH_SECRET",
+  "VERCEL_GIT_COMMIT_SHA",
 ] as const
 
 const originalEnvironment = Object.fromEntries(
@@ -72,6 +74,11 @@ describe("Google Sheets runtime environment", () => {
     process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY =
       "-----BEGIN PRIVATE KEY-----\\nTEST\\n-----END PRIVATE KEY-----\\n"
     process.env.SPREADSHEET_ID = "runtime-spreadsheet-id"
+    process.env.AUTH_SECRET = "runtime-auth-secret"
+    process.env.VERCEL_GIT_COMMIT_SHA = "runtime-commit-sha"
+    const consoleInfo = jest
+      .spyOn(console, "info")
+      .mockImplementation(() => undefined)
 
     await expect(sheetsService.getUserSheetsClient()).resolves.toBe(
       mockSheetsClient,
@@ -89,6 +96,13 @@ describe("Google Sheets runtime environment", () => {
     })
     expect(mockSpreadsheetGet).toHaveBeenCalledWith({
       spreadsheetId: "runtime-spreadsheet-id",
+    })
+    expect(consoleInfo).toHaveBeenCalledWith({
+      hasAdminGoogleSaEmail: true,
+      hasAdminGoogleSaPrivateKey: true,
+      hasSpreadsheetId: true,
+      hasAuthSecret: true,
+      vercelCommitSha: "runtime-commit-sha",
     })
   })
 })

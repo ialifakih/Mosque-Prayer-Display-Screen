@@ -6,6 +6,7 @@ import {
   updateAnnouncementAction,
 } from "@/app/admin/actions/announcements"
 import {
+  logGoogleSheetsRuntimeDiagnostics,
   sheetsCreateAnnouncement,
   sheetsDeleteAnnouncement,
   sheetsGetAnnouncements,
@@ -18,6 +19,7 @@ jest.mock("@/app/admin/requireAdminSession", () => ({
 }))
 
 jest.mock("@/services/GoogleSheetsService", () => ({
+  logGoogleSheetsRuntimeDiagnostics: jest.fn(),
   sheetsCreateAnnouncement: jest.fn(),
   sheetsDeleteAnnouncement: jest.fn(),
   sheetsGetAnnouncements: jest.fn(),
@@ -55,5 +57,14 @@ describe("announcement Server Actions", () => {
     expect(sheetsGetAnnouncements).not.toHaveBeenCalled()
     expect(sheetsUpdateAnnouncementRecord).not.toHaveBeenCalled()
     expect(sheetsDeleteAnnouncement).not.toHaveBeenCalled()
+  })
+
+  it("logs safe runtime diagnostics when announcement creation starts", async () => {
+    ;(requireAdminSession as jest.Mock).mockResolvedValue(undefined)
+
+    await createAnnouncementAction(input)
+
+    expect(logGoogleSheetsRuntimeDiagnostics).toHaveBeenCalledTimes(1)
+    expect(sheetsCreateAnnouncement).toHaveBeenCalledTimes(1)
   })
 })

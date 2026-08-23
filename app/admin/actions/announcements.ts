@@ -3,6 +3,7 @@
 import { requireAdminSession } from "@/app/admin/requireAdminSession"
 import { dtLocale, dtNowLocale } from "@/lib/datetimeUtils"
 import {
+  logGoogleSheetsRuntimeDiagnostics,
   sheetsCreateAnnouncement,
   sheetsDeleteAnnouncement,
   sheetsGetAnnouncements,
@@ -51,6 +52,7 @@ function revalidateAnnouncementViews(): void {
 export async function createAnnouncementAction(
   input: AnnouncementInput,
 ): Promise<AnnouncementRecord> {
+  logGoogleSheetsRuntimeDiagnostics()
   await requireAdminSession()
   const validated = validateAnnouncementInput(input)
   const timestamp = dtNowLocale().toISOString()
