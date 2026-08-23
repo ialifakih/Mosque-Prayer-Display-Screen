@@ -1,64 +1,97 @@
 import NextAuth, { AuthOptions, getServerSession } from "next-auth"
-import GoogleProvider from 'next-auth/providers/google'
+import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 import {
   isAllowedAdminEmail,
   parseAdminAllowedEmails,
 } from "@/lib/adminAuthorization"
 
-const AUTH_GOOGLE_CLIENT_ID = process.env.AUTH_GOOGLE_CLIENT_ID
-const AUTH_GOOGLE_CLIENT_SECRET = process.env.AUTH_GOOGLE_CLIENT_SECRET
-const AUTH_USERNAME = process.env.AUTH_USERNAME
-const AUTH_PASSWORD = process.env.AUTH_PASSWORD
-const AUTH_SECRET = process.env.AUTH_SECRET
-const ADMIN_ALLOWED_EMAILS = process.env.ADMIN_ALLOWED_EMAILS
+function envValue(name: string): string | undefined {
+  const value = process.env[name]?.trim()
+  return value ? value : undefined
+}
+
+function getAuthSecret(): string | undefined {
+  return envValue("AUTH_SECRET") ?? envValue("NEXTAUTH_SECRET")
+}
+
+function getCredentialsAuthConfig(): {
+  username: string
+  password: string
+} | null {
+  const username = envValue("AUTH_USERNAME")
+  const password = envValue("AUTH_PASSWORD")
+
+  if (!username || !password) return null
+  return { username, password }
+}
+
+function getGoogleAuthConfig(): {
+  clientId: string
+  clientSecret: string
+} | null {
+  const clientId = envValue("AUTH_GOOGLE_CLIENT_ID")
+  const clientSecret = envValue("AUTH_GOOGLE_CLIENT_SECRET")
+
+  if (!clientId || !clientSecret) return null
+  return { clientId, clientSecret }
+}
 
 const providers = []
+const googleAuth = getGoogleAuthConfig()
+const credentialsAuth = getCredentialsAuthConfig()
 
-if (AUTH_GOOGLE_CLIENT_ID && AUTH_GOOGLE_CLIENT_SECRET) {
+if (googleAuth) {
   providers.push(
     GoogleProvider({
-      clientId: AUTH_GOOGLE_CLIENT_ID!,
-      clientSecret: AUTH_GOOGLE_CLIENT_SECRET!,
+      clientId: googleAuth.clientId,
+      clientSecret: googleAuth.clientSecret,
       authorization: {
         params: {
           access_type: "offline",
           prompt: "consent",
-          scope: "openid email profile"
+          scope: "openid email profile",
         },
       },
     }),
   )
 }
 
-if (AUTH_USERNAME && AUTH_PASSWORD) {
+if (credentialsAuth) {
   providers.push(
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
         username: { label: "Username", type: "text", placeholder: "username" },
-        password: { label: "Password", type: "password", placeholder: "********" }
+        password: { label: "Password", type: "password", placeholder: "********" },
       },
       async authorize(credentials) {
-        if (credentials?.username === AUTH_USERNAME && credentials?.password === AUTH_PASSWORD) {
-          return { name: AUTH_USERNAME, id: AUTH_USERNAME }
+        // Read credentials at request time so a server process does not depend on
+        // values captured during the build/import phase.
+        const current = getCredentialsAuthConfig()
+        if (
+          current &&
+          credentials?.username === current.username &&
+          credentials?.password === current.password
+        ) {
+          return { name: current.username, id: current.username }
         }
 
-        // Return null if user data could not be retrieved
         return null
-      }
-    })
+      },
+    }),
   )
 }
 
 const authOptions: AuthOptions = {
-  secret: AUTH_SECRET,
-  providers: providers,
+  // AUTH_SECRET is the project-standard name. NEXTAUTH_SECRET remains a safe
+  // compatibility fallback for NextAuth deployments.
+  secret: getAuthSecret(),
+  providers,
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
-        return isAllowedAdminEmail(user.email, ADMIN_ALLOWED_EMAILS)
+        return isAllowedAdminEmail(user.email)
       }
 
       return account?.provider === "credentials"
@@ -73,31 +106,32 @@ const authOptions: AuthOptions = {
       return { ...session, provider: token.provider as string | undefined }
     },
     async redirect() {
-      // ALWAYS redirect to /admin after sign in
-      return "/admin";
+      return "/admin"
     },
   },
   theme: {
     colorScheme: "light",
-
-  }
+  },
 }
 
 /**
- * Helper function to get the session on the server without having to import the authOptions object every single time
- * @returns The session object or null
+ * Helper function to get the session on the server without having to import the
+ * authOptions object every single time.
  */
 const getSession = () => getServerSession(authOptions)
 
 /**
  * The admin is available only when credentials auth is configured, or when
  * Google OAuth is configured with at least one explicitly allowed email.
+ * Environment values are checked at call time to avoid stale build-time state.
  */
-const isAdminInterfaceEnabled = () => (
-  (AUTH_GOOGLE_CLIENT_ID != null &&
-    AUTH_GOOGLE_CLIENT_SECRET != null &&
-    parseAdminAllowedEmails(ADMIN_ALLOWED_EMAILS).length > 0)
-  || (AUTH_USERNAME != null && AUTH_PASSWORD != null)
-)
+const isAdminInterfaceEnabled = () => {
+  const google = getGoogleAuthConfig()
+  const credentials = getCredentialsAuthConfig()
+
+  return Boolean(
+    (google && parseAdminAllowedEmails().length > 0) || credentials,
+  )
+}
 
 export { authOptions, getSession, isAdminInterfaceEnabled }
