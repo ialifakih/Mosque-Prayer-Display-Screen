@@ -15,11 +15,11 @@ import type { JummahTimes } from "@/types/JummahTimesType"
 import Announcement from "@/components/Announcement/Announcement"
 
 const PRAYER_NAMES = [
-  "Fajr الفجر",
-  "Dhuhr الظهر",
-  "Asr العصر",
-  "Maghrib المغرب",
-  "Isha العشاء",
+  "Fajr / Alfajiri",
+  "Dhuhr / Adhuhuri",
+  "Asr / Alasiri",
+  "Maghrib / Magharibi",
+  "Isha / Aisha",
 ]
 
 const FEATURED_HADITH = {
@@ -119,9 +119,8 @@ export default function PrayerDisplay({
     <main className="prayer-display-main">
       <aside className="prayer-display-sidebar" aria-label="Sala inayofuata">
         <section className="next-prayer-card">
-          <div>
-            <p className="display-kicker">Sala inayofuata</p>
-            <p className="display-kicker-translation">Next prayer</p>
+          <div className="next-prayer-heading">
+            <p className="display-kicker">Next Prayer / Sala Inayofuata</p>
           </div>
 
           <div className="next-prayer-name">{nextPrayer.label}</div>
@@ -132,7 +131,7 @@ export default function PrayerDisplay({
           </div>
 
           <div className="next-prayer-countdown">
-            <span>Muda hadi Jamaa</span>
+            <span>Jamaa baada ya</span>
             <time className="tabular-nums" aria-live="polite">
               {countdown}
             </time>
@@ -141,7 +140,7 @@ export default function PrayerDisplay({
 
         <section className="jummah-card" aria-label="Swala ya Ijumaa">
           <div className="jummah-label">
-            <span>Swala ya Ijumaa</span>
+            <span>Jummah / Ijumaa</span>
             <small>صلاة الجمعة</small>
           </div>
           <time className="tabular-nums">
@@ -152,6 +151,7 @@ export default function PrayerDisplay({
 
       <div className="prayer-display-content">
         <section className="prayer-table-panel" aria-label="Nyakati za sala">
+          <div className="prayer-table-title">Prayer Times / Nyakati za Sala</div>
           <PrayerTimes prayers={prayers} nextPrayerTime={nextPrayerTime} />
         </section>
 
@@ -159,7 +159,7 @@ export default function PrayerDisplay({
           <section className="announcement-panel" aria-label="Matangazo">
             <div className="announcement-heading">
               <span className="announcement-mark" aria-hidden="true" />
-              <h2>Tangazo</h2>
+              <h2>Announcement / Tangazo</h2>
             </div>
             <div className="announcement-space">
               {announcementEnabled && <Announcement />}
