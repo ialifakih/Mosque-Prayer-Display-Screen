@@ -17,8 +17,9 @@ export const ANNOUNCEMENT_SHEET_HEADERS = [
 
 export function isSheetsClientEnabled(): boolean {
   return Boolean(
-    process.env.ADMIN_GOOGLE_SA_EMAIL &&
-      process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY,
+    process.env.ADMIN_GOOGLE_SERVICE_ACCOUNT_JSON ||
+      (process.env.ADMIN_GOOGLE_SA_EMAIL &&
+        process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY),
   )
 }
 
@@ -48,27 +49,23 @@ export function sheetsUtilValuesToNestedJson(rows: any[][]): Record<string, any>
   const result: Record<string, any> = {};
 
   for (const row of rows) {
-    // Expect at least [key, value]
     if (!row || row.length < 2) continue;
 
     const rawKey = row[0];
     const value = row[1];
 
-    // Skip header row if present
     if (rawKey === "key") continue;
 
     const key = String(rawKey);
-    const parts = key.split("."); // Split on dots to handle nested keys
+    const parts = key.split(".");
     let current: any = result;
 
     for (let i = 0; i < parts.length; i++) {
       const part = parts[i];
 
       if (i === parts.length - 1) {
-        // Last segment → assign value
         current[part] = value;
       } else {
-        // Ensure nested object exists
         if (current[part] == null || typeof current[part] !== "object") {
           current[part] = {};
         }
@@ -108,7 +105,6 @@ export function sheetsUtilFlattenedJsonToRows(json: Record<string, any>): any[][
 
   function walk(obj: any, path: string[] = []) {
     if (obj === null || typeof obj !== "object") {
-      // Primitive → emit row
       rows.push([path.join("."), obj]);
       return;
     }
@@ -121,7 +117,6 @@ export function sheetsUtilFlattenedJsonToRows(json: Record<string, any>): any[][
   walk(json);
   return rows;
 }
-
 
 /**
  * Converts the PrayerTimes spreadsheet values into the DailyPrayerTime json schema
@@ -140,7 +135,6 @@ export function prayerTimeValuesToPrayerTimesJsonSchema (values: any[][] | null 
     headers.forEach((header, i) => {
       const value = row[i] ?? ''
 
-      // Normal top-level keys (month, day_of_month, sunrise_start, etc.)
       if (header === 'month' ||
         header === 'day_of_month' ||
         header === 'sunrise_start') {
@@ -151,10 +145,8 @@ export function prayerTimeValuesToPrayerTimesJsonSchema (values: any[][] | null 
         return
       }
 
-      // Split header by underscores
       const parts = header.split('_')
 
-      // Special case for ASR (first & second)
       if (header.startsWith('asr_first_')) {
         obj.asr = obj.asr || {}
         obj.asr.start = value
@@ -167,12 +159,11 @@ export function prayerTimeValuesToPrayerTimesJsonSchema (values: any[][] | null 
         return
       }
 
-      // Everything else fits pattern: prayer_attribute
       const [prayer, ...rest] = parts
 
       obj[prayer] = obj[prayer] || {}
 
-      const key = rest.join('_') // e.g. "start", "congregation_start"
+      const key = rest.join('_')
       obj[prayer][key] = value
     })
 
