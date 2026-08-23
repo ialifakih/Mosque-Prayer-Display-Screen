@@ -1,0 +1,144 @@
+.prayer-display-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(247, 243, 234, 0.94), rgba(247, 243, 234, 0.94)),
+    radial-gradient(circle at 50% 10%, rgba(179, 138, 70, 0.12), transparent 28%),
+    repeating-linear-gradient(45deg, rgba(179, 138, 70, 0.045) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(-45deg, rgba(18, 97, 63, 0.03) 0 1px, transparent 1px 18px),
+    #f7f3ea;
+}
+
+.prayer-display-shell::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 4.5rem;
+  left: 50%;
+  width: min(64vw, 74rem);
+  height: min(46vw, 48rem);
+  transform: translateX(-50%);
+  border: 2px solid rgba(179, 138, 70, 0.18);
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 68% 68% 0 0;
+  box-shadow:
+    0 0 0 14px rgba(255, 253, 248, 0.35),
+    0 0 0 15px rgba(179, 138, 70, 0.08);
+  pointer-events: none;
+}
+
+.prayer-display-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(179, 138, 70, 0.11), transparent 3.5rem) left / 4.5rem 100% no-repeat,
+    linear-gradient(270deg, rgba(179, 138, 70, 0.11), transparent 3.5rem) right / 4.5rem 100% no-repeat,
+    repeating-linear-gradient(0deg, transparent 0 34px, rgba(179, 138, 70, 0.035) 34px 35px);
+  opacity: 0.9;
+}
+
+.prayer-display-header,
+.prayer-display-main {
+  position: relative;
+  z-index: 1;
+}
+
+.prayer-display-header {
+  background:
+    linear-gradient(rgba(255, 253, 248, 0.93), rgba(255, 253, 248, 0.93)),
+    repeating-linear-gradient(45deg, rgba(179, 138, 70, 0.05) 0 1px, transparent 1px 16px);
+  backdrop-filter: blur(2px);
+}
+
+.prayer-display-header-mosque {
+  position: relative;
+}
+
+.prayer-display-header-mosque::before {
+  content: "";
+  position: absolute;
+  top: -0.8rem;
+  bottom: -0.8rem;
+  left: 8%;
+  right: 8%;
+  z-index: -1;
+  border: 1px solid rgba(179, 138, 70, 0.18);
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+  pointer-events: none;
+}
+
+.next-prayer-card,
+.jummah-card,
+.prayer-table-panel,
+.announcement-panel,
+.hadith-card {
+  background-color: rgba(255, 253, 248, 0.94);
+  backdrop-filter: blur(1.5px);
+  box-shadow:
+    0 8px 22px rgba(28, 45, 39, 0.055),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.prayer-table-panel {
+  position: relative;
+}
+
+.prayer-table-panel::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 92%, rgba(18, 97, 63, 0.045), transparent 20%),
+    radial-gradient(circle at 93% 12%, rgba(179, 138, 70, 0.05), transparent 22%);
+}
+
+.prayer-table-title,
+.prayer-table {
+  position: relative;
+  z-index: 1;
+}
+
+.announcement-panel,
+.hadith-card {
+  position: relative;
+}
+
+.announcement-panel::after,
+.hadith-card::after {
+  content: "";
+  position: absolute;
+  right: 1.2rem;
+  bottom: 0.4rem;
+  width: 8rem;
+  height: 3.4rem;
+  opacity: 0.055;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 100%, #12613f 0 28%, transparent 29%),
+    linear-gradient(90deg, transparent 18%, #12613f 18% 23%, transparent 23% 47%, #12613f 47% 52%, transparent 52% 76%, #12613f 76% 81%, transparent 81%);
+}
+
+@media (max-width: 767px) {
+  .prayer-display-shell::before {
+    top: 8rem;
+    width: 92vw;
+    height: 70vw;
+  }
+
+  .prayer-display-shell::after {
+    background:
+      linear-gradient(90deg, rgba(179, 138, 70, 0.08), transparent 2rem) left / 2.5rem 100% no-repeat,
+      linear-gradient(270deg, rgba(179, 138, 70, 0.08), transparent 2rem) right / 2.5rem 100% no-repeat;
+  }
+
+  .prayer-display-header-mosque::before {
+    display: none;
+  }
+}
