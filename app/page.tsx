@@ -24,8 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const mosqueMetadata = getPublicMosqueMetadata(await getMetaData())
 
   return {
-    title: `${mosqueMetadata.name} Prayer Times | MosqueScreen Project by MosqueOS`,
-    description: `${mosqueMetadata.address} | ${mosqueMetadata.name} | MosqueScreen Project by MosqueOS`,
+    title: `${mosqueMetadata.name} | Nyakati za Sala`,
+    description: `${mosqueMetadata.name}${mosqueMetadata.address ? ` — ${mosqueMetadata.address}` : ""}. Nyakati za sala na matangazo ya msikiti.`,
   }
 }
 
