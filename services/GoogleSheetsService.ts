@@ -26,12 +26,64 @@ const SHEET_NAMES = {
   Announcements: "Announcements",
 }
 
+type ServiceAccountCredentials = {
+  email: string
+  privateKey: string
+}
+
 let sheetsClient: sheets_v4.Sheets | null = null
+
+function getServiceAccountCredentials(): ServiceAccountCredentials {
+  const serviceAccountJson = process.env.ADMIN_GOOGLE_SERVICE_ACCOUNT_JSON?.trim()
+
+  if (serviceAccountJson) {
+    try {
+      const parsed = JSON.parse(serviceAccountJson) as {
+        client_email?: unknown
+        private_key?: unknown
+      }
+      const email =
+        typeof parsed.client_email === "string" ? parsed.client_email.trim() : ""
+      const privateKey =
+        typeof parsed.private_key === "string" ? parsed.private_key : ""
+
+      if (!email || !privateKey) {
+        throw new Error("client_email or private_key is missing")
+      }
+
+      return {
+        email,
+        privateKey: privateKey.replace(/\\n/g, "\n"),
+      }
+    } catch (error: any) {
+      throw new Error(
+        `ADMIN_GOOGLE_SERVICE_ACCOUNT_JSON is invalid: ${error?.message ?? "unknown error"}`,
+      )
+    }
+  }
+
+  const email = process.env.ADMIN_GOOGLE_SA_EMAIL?.trim()
+  const privateKey = process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY
+
+  if (!email || !privateKey) {
+    throw new Error(
+      "Google Sheets credentials have not been set. Set ADMIN_GOOGLE_SERVICE_ACCOUNT_JSON.",
+    )
+  }
+
+  return {
+    email,
+    privateKey: privateKey.replace(/\\n/g, "\n"),
+  }
+}
 
 export function logGoogleSheetsRuntimeDiagnostics(): void {
   console.info({
-    hasAdminGoogleSaEmail: Boolean(process.env.ADMIN_GOOGLE_SA_EMAIL),
-    hasAdminGoogleSaPrivateKey: Boolean(
+    hasGoogleServiceAccountJson: Boolean(
+      process.env.ADMIN_GOOGLE_SERVICE_ACCOUNT_JSON,
+    ),
+    hasLegacyAdminGoogleSaEmail: Boolean(process.env.ADMIN_GOOGLE_SA_EMAIL),
+    hasLegacyAdminGoogleSaPrivateKey: Boolean(
       process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY,
     ),
     hasSpreadsheetId: Boolean(process.env.SPREADSHEET_ID),
@@ -43,19 +95,14 @@ export function logGoogleSheetsRuntimeDiagnostics(): void {
 export async function getUserSheetsClient() {
   logGoogleSheetsRuntimeDiagnostics()
 
-  const serviceAccountEmail = process.env.ADMIN_GOOGLE_SA_EMAIL
-  const serviceAccountPrivateKey = process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY
-
-  if (!serviceAccountEmail || !serviceAccountPrivateKey) {
-    throw new Error("Credentials have not been set")
-  }
-
   if (sheetsClient) return sheetsClient
+
+  const credentials = getServiceAccountCredentials()
 
   try {
     const googleAuthJwt = new google.auth.JWT({
-      email: serviceAccountEmail,
-      key: serviceAccountPrivateKey.replace(/\\n/g, "\n"),
+      email: credentials.email,
+      key: credentials.privateKey,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     })
 
@@ -305,6 +352,7 @@ export async function sheetsCreateAnnouncement(
     requestBody: { values: [announcementRecordToRow(announcement)] },
   })
 }
+
 async function getAnnouncementRow(
   id: string,
 ): Promise<{ rowIndex: number }> {
