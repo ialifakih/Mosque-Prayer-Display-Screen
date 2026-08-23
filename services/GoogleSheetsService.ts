@@ -18,10 +18,6 @@ import { DailyPrayerTime } from "@/types/DailyPrayerTimeType"
 import { JummahTimes } from "@/types/JummahTimesType"
 import { unstable_cache } from "next/cache"
 
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID ?? ""
-const ADMIN_GOOGLE_SA_PRIVATE_KEY = process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY
-const ADMIN_GOOGLE_SA_EMAIL = process.env.ADMIN_GOOGLE_SA_EMAIL
-
 const SHEET_NAMES = {
   PrayerTimes: "PrayerTimes",
   JummahTimes: "JummahTimes",
@@ -33,16 +29,19 @@ const SHEET_NAMES = {
 let sheetsClient: sheets_v4.Sheets | null = null
 
 export async function getUserSheetsClient() {
-  if (sheetsClient) return sheetsClient
+  const serviceAccountEmail = process.env.ADMIN_GOOGLE_SA_EMAIL
+  const serviceAccountPrivateKey = process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY
 
-  if (!ADMIN_GOOGLE_SA_EMAIL || !ADMIN_GOOGLE_SA_PRIVATE_KEY) {
+  if (!serviceAccountEmail || !serviceAccountPrivateKey) {
     throw new Error("Credentials have not been set")
   }
 
+  if (sheetsClient) return sheetsClient
+
   try {
     const googleAuthJwt = new google.auth.JWT({
-      email: ADMIN_GOOGLE_SA_EMAIL,
-      key: ADMIN_GOOGLE_SA_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      email: serviceAccountEmail,
+      key: serviceAccountPrivateKey.replace(/\\n/g, "\n"),
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     })
 
@@ -57,11 +56,21 @@ export async function getUserSheetsClient() {
   }
 }
 
+function getSpreadsheetId(): string {
+  const spreadsheetId = process.env.SPREADSHEET_ID?.trim()
+
+  if (!spreadsheetId) {
+    throw new Error("Spreadsheet ID has not been set")
+  }
+
+  return spreadsheetId
+}
+
 export async function isSheetsClientReady(): Promise<boolean> {
   try {
     const sheets = await getUserSheetsClient()
     await sheets.spreadsheets.get({
-      spreadsheetId: SPREADSHEET_ID,
+      spreadsheetId: getSpreadsheetId(),
     })
     return true
   } catch (error: any) {
@@ -98,7 +107,7 @@ const sheetsGetPrayerDataCached = unstable_cache(
     try {
       const sheets = await getUserSheetsClient()
       const prayerData = await sheets.spreadsheets.values.get({
-        spreadsheetId: SPREADSHEET_ID,
+        spreadsheetId: getSpreadsheetId(),
         range: SHEET_NAMES.PrayerTimes,
       })
       return prayerTimeValuesToPrayerTimesJsonSchema(
@@ -122,7 +131,7 @@ const sheetsGetJummahDataCached = unstable_cache(
     try {
       const sheets = await getUserSheetsClient()
       const jummahTimesData = await sheets.spreadsheets.values.get({
-        spreadsheetId: SPREADSHEET_ID,
+        spreadsheetId: getSpreadsheetId(),
         range: SHEET_NAMES.JummahTimes,
       })
       return sheetsUtilValuesToJson(
@@ -146,7 +155,7 @@ const sheetsGetMetadataCached = unstable_cache(
     try {
       const sheets = await getUserSheetsClient()
       const metadata = await sheets.spreadsheets.values.get({
-        spreadsheetId: SPREADSHEET_ID,
+        spreadsheetId: getSpreadsheetId(),
         range: SHEET_NAMES.Metadata,
       })
       return sheetsUtilValuesToNestedJson(
@@ -170,7 +179,7 @@ const sheetsGetConfigurationDataCached = unstable_cache(
     try {
       const sheets = await getUserSheetsClient()
       const configurationData = await sheets.spreadsheets.values.get({
-        spreadsheetId: SPREADSHEET_ID,
+        spreadsheetId: getSpreadsheetId(),
         range: SHEET_NAMES.Configuration,
       })
       return deepmerge(
@@ -202,7 +211,7 @@ function isMissingAnnouncementsWorksheet(error: any): boolean {
 async function getAnnouncementSheetValues(): Promise<unknown[][]> {
   const sheets = await getUserSheetsClient()
   const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: getSpreadsheetId(),
     range: SHEET_NAMES.Announcements,
   })
   return response.data.values ?? []
@@ -222,7 +231,7 @@ export async function sheetsGetAnnouncements(): Promise<AnnouncementRecord[]> {
 async function ensureAnnouncementsWorksheet(): Promise<void> {
   const sheets = await getUserSheetsClient()
   const spreadsheet = await sheets.spreadsheets.get({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: getSpreadsheetId(),
     fields: "sheets.properties",
   })
   const worksheet = spreadsheet.data.sheets?.find(
@@ -231,7 +240,7 @@ async function ensureAnnouncementsWorksheet(): Promise<void> {
 
   if (worksheet == null) {
     await sheets.spreadsheets.batchUpdate({
-      spreadsheetId: SPREADSHEET_ID,
+      spreadsheetId: getSpreadsheetId(),
       requestBody: {
         requests: [
           {
@@ -245,14 +254,14 @@ async function ensureAnnouncementsWorksheet(): Promise<void> {
   }
 
   const headerResponse = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: getSpreadsheetId(),
     range: `${SHEET_NAMES.Announcements}!1:1`,
   })
   const existingHeaders = headerResponse.data.values?.[0] ?? []
 
   if (existingHeaders.length === 0) {
     await sheets.spreadsheets.values.update({
-      spreadsheetId: SPREADSHEET_ID,
+      spreadsheetId: getSpreadsheetId(),
       range: `${SHEET_NAMES.Announcements}!A1:J1`,
       valueInputOption: "RAW",
       requestBody: { values: [[...ANNOUNCEMENT_SHEET_HEADERS]] },
@@ -275,7 +284,7 @@ export async function sheetsCreateAnnouncement(
   await ensureAnnouncementsWorksheet()
   const sheets = await getUserSheetsClient()
   await sheets.spreadsheets.values.append({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: getSpreadsheetId(),
     range: `${SHEET_NAMES.Announcements}!A:J`,
     valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
@@ -307,7 +316,7 @@ export async function sheetsUpdateAnnouncementRecord(
   const rowNumber = rowIndex + 1
 
   await sheets.spreadsheets.values.update({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: getSpreadsheetId(),
     range: `${SHEET_NAMES.Announcements}!A${rowNumber}:J${rowNumber}`,
     valueInputOption: "RAW",
     requestBody: { values: [announcementRecordToRow(announcement)] },
@@ -319,7 +328,7 @@ export async function sheetsDeleteAnnouncement(id: string): Promise<void> {
   const { rowIndex } = await getAnnouncementRow(id)
   const sheets = await getUserSheetsClient()
   const spreadsheet = await sheets.spreadsheets.get({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: getSpreadsheetId(),
     fields: "sheets.properties",
   })
   const sheetId = spreadsheet.data.sheets?.find(
@@ -331,7 +340,7 @@ export async function sheetsDeleteAnnouncement(id: string): Promise<void> {
   }
 
   await sheets.spreadsheets.batchUpdate({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: getSpreadsheetId(),
     requestBody: {
       requests: [
         {

@@ -2,9 +2,6 @@ import { DailyPrayerTime } from '@/types/DailyPrayerTimeType'
 import type { AnnouncementRecord } from "@/types/AnnouncementType"
 import { dtMonthNumToFullMonth } from "@/lib/datetimeUtils"
 
-const ADMIN_GOOGLE_SA_PRIVATE_KEY = process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY
-const ADMIN_GOOGLE_SA_EMAIL = process.env.ADMIN_GOOGLE_SA_EMAIL
-
 export const ANNOUNCEMENT_SHEET_HEADERS = [
   "id",
   "title",
@@ -19,7 +16,10 @@ export const ANNOUNCEMENT_SHEET_HEADERS = [
 ] as const
 
 export function isSheetsClientEnabled(): boolean {
-  return !(!ADMIN_GOOGLE_SA_EMAIL || !ADMIN_GOOGLE_SA_PRIVATE_KEY)
+  return Boolean(
+    process.env.ADMIN_GOOGLE_SA_EMAIL &&
+      process.env.ADMIN_GOOGLE_SA_PRIVATE_KEY,
+  )
 }
 
 /**
