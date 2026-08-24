@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" aria-hidden="true">
+  <defs>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf8"/>
+      <stop offset="1" stop-color="#eadfc8"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d4b06a"/>
+      <stop offset="1" stop-color="#9e742e"/>
+    </linearGradient>
+    <pattern id="geo" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M32 2 62 32 32 62 2 32Z" fill="none" stroke="#b38a46" stroke-width="1" opacity=".11"/>
+      <circle cx="32" cy="32" r="13" fill="none" stroke="#12613f" stroke-width="1" opacity=".06"/>
+      <path d="M32 13 51 32 32 51 13 32Z" fill="none" stroke="#b38a46" stroke-width="1" opacity=".08"/>
+    </pattern>
+  </defs>
+
+  <rect width="1920" height="1080" fill="#f7f3e9"/>
+  <rect width="1920" height="1080" fill="url(#geo)"/>
+
+  <g opacity=".86">
+    <path d="M0 0h175v1080H0z" fill="url(#stone)"/>
+    <path d="M174 0h5v1080h-5z" fill="url(#gold)"/>
+    <path d="M0 155c79 0 145-63 145-141H0z" fill="#f3ead7"/>
+    <path d="M0 242c103 0 187-83 187-185" fill="none" stroke="#b38a46" stroke-width="4" opacity=".62"/>
+    <path d="M24 1080V686c0-95 70-172 156-172" fill="none" stroke="#c8ad78" stroke-width="17" opacity=".32"/>
+    <path d="M36 1080V704c0-77 57-140 129-140" fill="none" stroke="#fffdf8" stroke-width="11" opacity=".95"/>
+    <g transform="translate(44 262)">
+      <rect x="35" y="215" width="38" height="305" rx="8" fill="#e7d8b8"/>
+      <rect x="42" y="99" width="24" height="130" rx="4" fill="#eee2c9"/>
+      <path d="M37 100h34L54 48z" fill="#b38a46"/>
+      <circle cx="54" cy="38" r="6" fill="#12613f"/>
+      <path d="M51 30c0-7 7-11 13-7-4 0-7 3-7 7s3 7 7 7c-6 4-13 0-13-7Z" fill="#b38a46"/>
+      <rect x="33" y="281" width="42" height="7" fill="#b38a46" opacity=".55"/>
+      <rect x="33" y="385" width="42" height="7" fill="#b38a46" opacity=".45"/>
+      <g fill="#12613f" opacity=".82">
+        <rect x="43" y="136" width="7" height="22" rx="3"/>
+        <rect x="57" y="136" width="7" height="22" rx="3"/>
+        <rect x="43" y="319" width="7" height="29" rx="3"/>
+        <rect x="57" y="319" width="7" height="29" rx="3"/>
+        <rect x="43" y="420" width="7" height="29" rx="3"/>
+        <rect x="57" y="420" width="7" height="29" rx="3"/>
+      </g>
+    </g>
+    <g transform="translate(16 827)" fill="#12613f" opacity=".88">
+      <path d="M0 253V132c0-52 43-94 96-94s96 42 96 94v121Z"/>
+      <path d="M53 41C66 11 126 11 139 41Z" fill="#b38a46"/>
+      <path d="M82 10h28L96-22z" fill="#b38a46"/>
+    </g>
+  </g>
+
+  <g transform="translate(1920 0) scale(-1 1)" opacity=".58">
+    <path d="M0 0h140v1080H0z" fill="url(#stone)"/>
+    <path d="M139 0h4v1080h-4z" fill="url(#gold)"/>
+    <path d="M0 178c70 0 128-57 128-128H0z" fill="#f3ead7"/>
+    <path d="M0 256c91 0 165-73 165-164" fill="none" stroke="#b38a46" stroke-width="4" opacity=".54"/>
+    <path d="M18 1080V725c0-86 64-156 143-156" fill="none" stroke="#d0b889" stroke-width="15" opacity=".25"/>
+  </g>
+
+  <g opacity=".085" fill="#12613f">
+    <path d="M1190 1080V982c0-49 40-89 89-89s89 40 89 89v98Z"/>
+    <path d="M1315 1080V948c0-40 32-72 72-72s72 32 72 72v132Z"/>
+    <path d="M1445 1080V1005c0-32 26-58 58-58s58 26 58 58v75Z"/>
+    <rect x="1271" y="827" width="15" height="159" rx="5"/>
+    <rect x="1380" y="802" width="14" height="179" rx="5"/>
+    <rect x="1495" y="842" width="12" height="150" rx="5"/>
+  </g>
+
+  <path d="M430 102h1060" stroke="#b38a46" stroke-width="2" opacity=".16"/>
+  <path d="M480 1052h960" stroke="#b38a46" stroke-width="2" opacity=".16"/>
+</svg>
