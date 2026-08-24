@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="cream" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#f2eadb"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d1b36d"/>
+      <stop offset="0.5" stop-color="#9f7a31"/>
+      <stop offset="1" stop-color="#d8c187"/>
+    </linearGradient>
+    <pattern id="geom" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M22 0 44 22 22 44 0 22Z" fill="none" stroke="#b38a46" stroke-width="1" opacity=".12"/>
+      <circle cx="22" cy="22" r="8" fill="none" stroke="#12613f" stroke-width="1" opacity=".08"/>
+    </pattern>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#cream)"/>
+  <rect width="1920" height="1080" fill="url(#geom)" opacity=".55"/>
+
+  <!-- large architectural arch -->
+  <path d="M92 1080V360C92 130 330 42 570 42h780c240 0 478 88 478 318v720" fill="none" stroke="url(#gold)" stroke-width="6" opacity=".45"/>
+  <path d="M120 1080V374C120 160 342 70 576 70h768c234 0 456 90 456 304v706" fill="none" stroke="#fff" stroke-width="18" opacity=".55"/>
+  <path d="M132 1080V382C132 178 350 86 584 86h752c234 0 452 92 452 296v698" fill="none" stroke="#b38a46" stroke-width="2" opacity=".25"/>
+
+  <!-- left carved column -->
+  <g opacity=".72">
+    <rect x="12" y="190" width="76" height="850" rx="10" fill="#efe4d1" stroke="#b38a46" stroke-width="2"/>
+    <rect x="25" y="220" width="50" height="760" fill="url(#geom)"/>
+    <path d="M12 310h76M12 900h76" stroke="#b38a46" stroke-width="3"/>
+    <path d="M12 310c20-25 56-25 76 0M12 900c20 25 56 25 76 0" fill="none" stroke="#b38a46" stroke-width="3"/>
+  </g>
+
+  <!-- right carved column -->
+  <g opacity=".72">
+    <rect x="1832" y="190" width="76" height="850" rx="10" fill="#efe4d1" stroke="#b38a46" stroke-width="2"/>
+    <rect x="1845" y="220" width="50" height="760" fill="url(#geom)"/>
+    <path d="M1832 310h76M1832 900h76" stroke="#b38a46" stroke-width="3"/>
+    <path d="M1832 310c20-25 56-25 76 0M1832 900c20 25 56 25 76 0" fill="none" stroke="#b38a46" stroke-width="3"/>
+  </g>
+
+  <!-- left mosque silhouette -->
+  <g transform="translate(36 650)" opacity=".78">
+    <path d="M0 300h245v85H0z" fill="#0b422d"/>
+    <path d="M32 300v-82h28v82zM184 300v-82h28v82z" fill="#0b422d"/>
+    <path d="M39 218h14l-7-26zM191 218h14l-7-26z" fill="#b38a46"/>
+    <path d="M68 300v-122h108v122z" fill="#12613f"/>
+    <path d="M68 178c18-76 90-76 108 0z" fill="#12613f"/>
+    <circle cx="122" cy="126" r="7" fill="#b38a46"/>
+    <path d="M122 102v24" stroke="#b38a46" stroke-width="4"/>
+    <path d="M118 102a11 11 0 1 1 8 0 8 8 0 1 0-8 0z" fill="#b38a46"/>
+    <path d="M93 300v-54c0-38 58-38 58 0v54z" fill="#f2eadb" opacity=".72"/>
+  </g>
+
+  <!-- right lantern and palm -->
+  <g transform="translate(1700 660)" opacity=".7">
+    <path d="M92 350c-8-112 5-212 48-298" stroke="#6d7e61" stroke-width="12" fill="none"/>
+    <path d="M140 54c-55 4-95 28-128 78 54-18 94-17 132 7-50 9-82 35-102 77 45-21 79-23 112-5-35 20-55 46-65 78 39-24 72-30 101-18" fill="none" stroke="#6d7e61" stroke-width="11" stroke-linecap="round"/>
+    <rect x="198" y="160" width="56" height="128" rx="8" fill="none" stroke="#b38a46" stroke-width="7"/>
+    <path d="M188 160h76l-12-32h-52zM214 128v-24h24v24M226 96v-20" fill="none" stroke="#b38a46" stroke-width="7"/>
+    <path d="M210 178h32v86h-32z" fill="#fff3cf" opacity=".7"/>
+  </g>
+
+  <!-- bottom mosque skyline -->
+  <g transform="translate(710 886)" opacity=".12" fill="#0b422d">
+    <rect x="0" y="120" width="520" height="74"/>
+    <path d="M42 120V68h32v52zM446 120V68h32v52z"/>
+    <path d="M49 68h18l-9-32zM453 68h18l-9-32z"/>
+    <path d="M105 120V78h310v42z"/>
+    <path d="M162 78c18-86 178-86 196 0z"/>
+    <circle cx="260" cy="2" r="8" fill="#b38a46"/>
+  </g>
+
+  <!-- gold bottom rule -->
+  <path d="M110 1028h1700" stroke="url(#gold)" stroke-width="3" opacity=".55"/>
+</svg>
