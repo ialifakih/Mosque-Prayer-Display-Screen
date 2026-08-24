@@ -116,8 +116,8 @@ export default function PrayerDisplay({
       <aside className="prayer-display-sidebar" aria-label="Sala inayofuata">
         <section className="next-prayer-card">
           <div className="next-prayer-heading">
-            <p>Next Prayer</p>
-            <strong>Sala Inayofuata</strong>
+            <p>Sala Inayofuata</p>
+            <strong>Next Prayer</strong>
           </div>
 
           <div className="next-prayer-hero">
@@ -125,15 +125,31 @@ export default function PrayerDisplay({
               {nextPrayer.icon}
             </div>
             <div className="next-prayer-name">{nextPrayer.label}</div>
-            <div className="next-prayer-in-label">Muda hadi Jamaa</div>
-            <time className="next-prayer-countdown-value tabular-nums" aria-live="polite">
-              {countdown}
-            </time>
-          </div>
 
-          <div className="next-prayer-start">
-            <span>Mwanzo</span>
-            <strong>{dtFormatTimeTo12h(nextPrayerData.start)}</strong>
+            <div className="next-prayer-times">
+              <div className="next-prayer-time">
+                <span>Mwanzo</span>
+                <strong className="tabular-nums">
+                  {dtFormatTimeTo12h(nextPrayerData.start)}
+                </strong>
+              </div>
+              <div className="next-prayer-time">
+                <span>Jamaa</span>
+                <strong className="tabular-nums">
+                  {dtFormatTimeTo12h(nextPrayerData.congregation_start)}
+                </strong>
+              </div>
+            </div>
+
+            <div className="next-prayer-countdown-block">
+              <span>Muda hadi Jamaa</span>
+              <time
+                className="next-prayer-countdown-value tabular-nums"
+                aria-live="polite"
+              >
+                {countdown}
+              </time>
+            </div>
           </div>
         </section>
 
@@ -143,11 +159,11 @@ export default function PrayerDisplay({
             <span className="jummah-minaret" />
           </div>
           <div className="jummah-copy">
-            <div className="jummah-title">Jummah / Ijumaa</div>
+            <div className="jummah-title">Swala ya Ijumaa</div>
             <time className="tabular-nums">
               {jummahTime ? dtFormatTimeTo12h(jummahTime) : "—"}
             </time>
-            <small>Swala ya Ijumaa</small>
+            <small>Jummah / Ijumaa</small>
           </div>
         </section>
       </aside>
@@ -156,7 +172,7 @@ export default function PrayerDisplay({
         <section className="prayer-table-panel" aria-label="Nyakati za sala">
           <div className="prayer-table-title">
             <span className="title-ornament" aria-hidden="true">✦</span>
-            <span>Prayer Times / Nyakati za Sala</span>
+            <span>Nyakati za Sala</span>
             <span className="title-ornament" aria-hidden="true">✦</span>
           </div>
           <PrayerTimes prayers={prayers} nextPrayerTime={nextPrayerTime} />
@@ -166,7 +182,7 @@ export default function PrayerDisplay({
           <section className="announcement-panel" aria-label="Matangazo">
             <div className="announcement-heading">
               <span className="announcement-icon" aria-hidden="true">●</span>
-              <h2>Announcement / Tangazo</h2>
+              <h2>Tangazo</h2>
             </div>
             <div className="announcement-space">
               {announcementEnabled && <Announcement />}
