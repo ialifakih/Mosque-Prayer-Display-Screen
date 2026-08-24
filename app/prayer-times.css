@@ -1,177 +1,83 @@
 :root {
-  --premium-ivory: #f8f2e6;
-  --premium-paper: #fffdf8;
-  --premium-green: #0c5539;
-  --premium-green-dark: #073d2a;
-  --premium-green-deep: #052f21;
-  --premium-gold: #b89245;
-  --premium-gold-light: #dec689;
-  --premium-ink: #152c24;
-  --premium-muted: #66746e;
-  --premium-line: rgba(155, 119, 49, 0.34);
+  --cream: #f7f3ea;
+  --paper: #fffdf8;
+  --paper-soft: #fbf7ee;
+  --green: #12613f;
+  --green-dark: #0b422d;
+  --green-deep: #083624;
+  --gold: #b38a46;
+  --gold-soft: #d8bd83;
+  --ink: #1c2d27;
+  --muted: #68756f;
+  --line: rgba(28, 45, 39, 0.14);
 }
 
+* { box-sizing: border-box; }
+
 .prayer-display-shell {
+  position: relative;
   min-height: 100vh;
   min-width: 100%;
-  color: var(--premium-ink);
-  background: var(--premium-ivory);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow: hidden;
+  color: var(--ink);
+  background: var(--cream) url('/zanzibar-architecture.svg') center / cover no-repeat;
 }
+
+.prayer-display-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(247,243,234,.18) 0 11%, rgba(247,243,234,.88) 18% 82%, rgba(247,243,234,.18) 89% 100%);
+}
+
+.prayer-display-header,
+.prayer-display-main { position: relative; z-index: 1; }
 
 .prayer-display-header {
   display: grid;
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1.45fr 1fr;
   align-items: center;
-  padding: 1.05rem 2.2rem;
-  border-bottom: 1px solid var(--premium-line);
-  background: rgba(255, 253, 248, 0.92);
-  box-shadow: 0 8px 24px rgba(27, 59, 47, 0.055);
+  gap: 1.4rem;
+  min-height: 7.4rem;
+  padding: .8rem 3rem 1rem;
+  border-bottom: 1px solid rgba(179,138,70,.48);
+  background: rgba(255,253,248,.86);
+  backdrop-filter: blur(2px);
 }
 
+.prayer-display-header-date { justify-content: flex-start; }
+.prayer-display-header-clock { justify-content: flex-end; }
 .prayer-display-header-date,
 .prayer-display-header-clock,
-.prayer-display-header-mosque {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  justify-content: center;
-}
+.prayer-display-header-mosque { display: flex; min-width: 0; align-items: center; }
 
-.display-date {
-  text-align: center;
-}
+.display-date { text-align: left; }
+.display-date-gregorian { margin: 0; font-size: 1.55rem; font-weight: 850; line-height: 1.08; }
+.display-date-hijri { margin: .35rem 0 0; color: #765d30; font-size: 1rem; font-weight: 650; }
 
-.display-date-gregorian {
-  color: var(--premium-ink);
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1.14;
-}
+.display-mosque-metadata { display: flex; align-items: center; justify-content: center; gap: 1rem; min-width: 0; text-align: center; }
+.display-mosque-logo { width: 4.6rem; height: 4.6rem; flex: none; display: flex; align-items: center; justify-content: center; padding: .35rem; border: 1px solid rgba(179,138,70,.65); border-radius: 50%; background: rgba(255,253,248,.9); box-shadow: 0 3px 10px rgba(11,66,45,.08); }
+.display-mosque-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.display-mosque-name { margin: 0; color: var(--green-dark); font-family: Georgia, 'Times New Roman', serif; font-size: 2.3rem; font-weight: 700; line-height: 1.05; letter-spacing: -.015em; }
+.display-mosque-location { margin: .35rem 0 0; color: #44564f; font-size: 1rem; font-weight: 600; letter-spacing: .03em; }
 
-.display-date-hijri {
-  margin-top: 0.3rem;
-  color: #725b31;
-  font-size: 0.9rem;
-  font-weight: 650;
-}
-
-.display-mosque-metadata {
-  position: relative;
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  text-align: center;
-}
-
-.display-mosque-metadata::after {
-  content: "";
-  position: absolute;
-  right: 13%;
-  bottom: -0.55rem;
-  left: 13%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--premium-gold), transparent);
-}
-
-.display-mosque-logo {
-  position: relative;
-  display: flex;
-  width: 4.5rem;
-  height: 4.5rem;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: 0.35rem;
-  border: 1px solid rgba(184, 146, 69, 0.65);
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 35%, #fffdf8 0 52%, #f0e1c2 53% 100%);
-  box-shadow: inset 0 0 0 4px rgba(184, 146, 69, 0.08);
-}
-
-.display-mosque-logo::before {
-  content: "☾";
-  position: absolute;
-  color: var(--premium-green);
-  font-size: 2.5rem;
-  line-height: 1;
-  opacity: 0.38;
-}
-
-.display-mosque-logo img {
-  position: relative;
-  z-index: 1;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.display-mosque-name {
-  overflow: hidden;
-  margin: 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--premium-green-dark);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.15rem;
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-}
-
-.display-mosque-location {
-  margin: 0.28rem 0 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #4c6259;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.96rem;
-  font-weight: 500;
-}
-
-.display-clock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.display-clock-label {
-  order: 2;
-  margin-top: 0.3rem;
-  color: #8b6c30;
-  font-size: 0.68rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.17em;
-}
-
-.display-clock-time {
-  order: 1;
-  color: var(--premium-green-dark);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 3.4rem;
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.025em;
-}
+.display-clock { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.display-clock-label { order: 2; margin-top: .3rem; color: #80642f; font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .18em; }
+.display-clock-time { color: var(--green-dark) !important; font-family: Georgia, 'Times New Roman', serif; font-size: 3.85rem; font-weight: 700; line-height: .95; }
 
 .prayer-display-main {
   display: grid;
+  grid-template-columns: 21rem minmax(0,1fr);
   gap: 1rem;
-  padding: 1rem 1.35rem 1.15rem;
+  height: calc(100vh - 7.4rem);
+  padding: 1rem 2.25rem 1.7rem;
 }
 
 .prayer-display-sidebar,
-.prayer-display-content {
-  display: grid;
-  gap: 1rem;
-  min-width: 0;
-}
+.prayer-display-content { display: grid; gap: 1rem; min-width: 0; min-height: 0; }
+.prayer-display-sidebar { grid-template-rows: minmax(0,1fr) 10.2rem; }
+.prayer-display-content { grid-template-rows: minmax(0,1fr) 11.2rem; }
 
 .next-prayer-card,
 .jummah-card,
@@ -179,722 +85,118 @@
 .announcement-panel,
 .hadith-card {
   overflow: hidden;
-  border: 1px solid rgba(155, 119, 49, 0.62);
-  border-radius: 0.9rem;
-  background: rgba(255, 253, 248, 0.96);
-  box-shadow:
-    0 8px 20px rgba(16, 54, 39, 0.07),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(179,138,70,.78);
+  border-radius: .9rem;
+  box-shadow: 0 7px 20px rgba(31,59,47,.07);
 }
 
 .next-prayer-card {
-  display: grid;
-  min-height: 27rem;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  color: #fffaf1;
-  background:
-    radial-gradient(circle at 50% 18%, rgba(222, 198, 137, 0.1), transparent 31%),
-    linear-gradient(180deg, var(--premium-green) 0%, var(--premium-green-deep) 100%);
-  box-shadow:
-    0 10px 24px rgba(6, 47, 33, 0.16),
-    inset 0 0 0 2px rgba(222, 198, 137, 0.14);
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  color: #fff9ec;
+  background: linear-gradient(155deg, var(--green) 0%, var(--green-dark) 58%, var(--green-deep) 100%);
+  border-width: 2px;
 }
 
 .next-prayer-heading {
-  position: relative;
-  padding: 0.95rem 1rem 0.82rem;
-  border-bottom: 1px solid rgba(222, 198, 137, 0.38);
+  padding: .75rem 1rem .7rem;
+  border-bottom: 1px solid rgba(216,189,131,.45);
   text-align: center;
 }
+.next-prayer-heading p { margin: 0; color: #e7d6ad; font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .17em; }
+.next-prayer-heading strong { display: block; margin-top: .15rem; color: #fff9ec; font-size: .88rem; text-transform: uppercase; letter-spacing: .08em; }
 
-.next-prayer-heading::after {
-  content: "✦";
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--premium-gold-light);
-  font-size: 0.9rem;
-}
+.next-prayer-hero { display: flex; flex: 1; min-height: 0; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 1rem 1.15rem 1.15rem; text-align: center; }
+.next-prayer-symbol { display: grid; place-items: center; width: 4.2rem; height: 4.2rem; border: 1px solid rgba(216,189,131,.68); border-radius: 50%; color: #f0d28d; font-size: 2rem; box-shadow: inset 0 0 0 5px rgba(216,189,131,.07); }
+.next-prayer-name { color: #fff9ec; font-family: Georgia, 'Times New Roman', serif; font-size: 2.3rem; font-weight: 700; line-height: 1.05; }
+.next-prayer-times { display: grid; grid-template-columns: 1fr 1fr; width: 100%; border-top: 1px solid rgba(216,189,131,.35); border-bottom: 1px solid rgba(216,189,131,.35); }
+.next-prayer-time { padding: .9rem .45rem; }
+.next-prayer-time + .next-prayer-time { border-left: 1px solid rgba(216,189,131,.35); }
+.next-prayer-time span,
+.next-prayer-countdown-block span { display: block; color: #d9c28e; font-size: .66rem; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; }
+.next-prayer-time strong { display: block; margin-top: .35rem; color: #fff9ec; font-size: 2rem; font-weight: 850; }
+.next-prayer-countdown-block { width: 100%; }
+.next-prayer-countdown-value { display: block; margin-top: .35rem; color: #f0cc78; font-family: Georgia, 'Times New Roman', serif; font-size: 2.6rem; font-weight: 700; line-height: 1; }
 
-.next-prayer-heading p,
-.next-prayer-heading strong {
-  margin: 0;
-  text-transform: uppercase;
-}
+.jummah-card { display: grid; grid-template-columns: 6rem 1fr; align-items: center; background: rgba(255,253,248,.93); }
+.jummah-art { position: relative; height: 100%; border-right: 1px solid rgba(179,138,70,.35); background: linear-gradient(180deg,#f8f1df,#efe0bd); }
+.jummah-dome { position: absolute; left: 1rem; bottom: 1rem; width: 3.4rem; height: 2.2rem; border-radius: 3.4rem 3.4rem .25rem .25rem; background: var(--green-dark); }
+.jummah-minaret { position: absolute; left: 3.7rem; bottom: 1rem; width: .55rem; height: 4rem; background: var(--green-dark); }
+.jummah-copy { text-align: center; }
+.jummah-title { color: #7a6030; font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; }
+.jummah-copy time { display: block; margin-top: .45rem; color: var(--green-dark); font-family: Georgia, 'Times New Roman', serif; font-size: 2.65rem; font-weight: 700; }
+.jummah-copy small { color: #53645d; font-size: .8rem; font-weight: 600; }
 
-.next-prayer-heading p {
-  color: #fffaf1;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
+.prayer-table-panel { display: flex; min-height: 0; flex-direction: column; background: rgba(255,253,248,.95); }
+.prayer-table-title { display: flex; align-items: center; justify-content: center; gap: .9rem; flex: none; padding: .72rem 1rem; color: #fffaf0; background: linear-gradient(90deg,var(--green-dark),var(--green),var(--green-dark)); font-family: Georgia, 'Times New Roman', serif; font-size: 1.15rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.title-ornament { color: #e2c16f; font-size: .8rem; }
 
-.next-prayer-heading strong {
-  display: block;
-  margin-top: 0.18rem;
-  color: var(--premium-gold-light);
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.11em;
-}
-
-.next-prayer-hero {
-  display: flex;
-  min-height: 0;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0.9rem 1rem 1rem;
-  text-align: center;
-}
-
-.next-prayer-symbol {
-  display: grid;
-  width: 4.1rem;
-  height: 4.1rem;
-  place-items: center;
-  border: 1px solid var(--premium-gold-light);
-  border-radius: 50%;
-  color: var(--premium-gold-light);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.25rem;
-  box-shadow: inset 0 0 0 4px rgba(222, 198, 137, 0.08);
-}
-
-.next-prayer-name {
-  margin-top: 0.65rem;
-  color: #fffaf1;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.05rem;
-  font-weight: 700;
-  line-height: 1.08;
-}
-
-.next-prayer-in-label {
-  position: relative;
-  margin-top: 1rem;
-  color: #e9ddbf;
-  font-size: 0.7rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-}
-
-.next-prayer-in-label::before,
-.next-prayer-in-label::after {
-  content: "";
-  display: inline-block;
-  width: 2.1rem;
-  height: 1px;
-  margin: 0 0.55rem 0.22rem;
-  background: rgba(222, 198, 137, 0.6);
-}
-
-.next-prayer-countdown-value {
-  margin-top: 0.55rem;
-  color: var(--premium-gold-light);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.8rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.next-prayer-start {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 6.2rem;
-  padding: 0.65rem 1rem 0.8rem;
-  border-top: 1px solid rgba(155, 119, 49, 0.44);
-  color: var(--premium-green-dark);
-  background: linear-gradient(180deg, #fffdf8 0%, #f5ecdc 100%);
-}
-
-.next-prayer-start span {
-  transform: translateY(-1.15rem);
-  margin-bottom: -0.9rem;
-  padding: 0.28rem 1rem;
-  border: 1px solid rgba(155, 119, 49, 0.75);
-  border-radius: 999px;
-  color: #fffdf8;
-  background: linear-gradient(180deg, #c7a75f, #99752f);
-  font-size: 0.65rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.next-prayer-start strong {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.65rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.jummah-card {
-  display: grid;
-  min-height: 8.2rem;
-  grid-template-columns: 5.8rem minmax(0, 1fr);
-  color: var(--premium-green-dark);
-  background: linear-gradient(180deg, #fffdf8, #f7efe1);
-}
-
-.jummah-art {
-  position: relative;
-  min-height: 100%;
-  border-right: 1px solid rgba(155, 119, 49, 0.32);
-  background: linear-gradient(180deg, #f9f2e4, #efe2ca);
-}
-
-.jummah-dome,
-.jummah-minaret {
-  position: absolute;
-  display: block;
-  background: var(--premium-green);
-}
-
-.jummah-dome {
-  left: 1.25rem;
-  bottom: 0.85rem;
-  width: 3.35rem;
-  height: 2.2rem;
-  border-radius: 55% 55% 10% 10% / 80% 80% 10% 10%;
-}
-
-.jummah-dome::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -0.9rem;
-  width: 1px;
-  height: 0.95rem;
-  background: var(--premium-gold);
-}
-
-.jummah-dome::after {
-  content: "☾";
-  position: absolute;
-  left: calc(50% - 0.33rem);
-  top: -1.52rem;
-  color: var(--premium-gold);
-  font-size: 0.8rem;
-}
-
-.jummah-minaret {
-  left: 0.72rem;
-  bottom: 0.85rem;
-  width: 0.52rem;
-  height: 4.25rem;
-  border-radius: 0.3rem 0.3rem 0 0;
-}
-
-.jummah-minaret::before {
-  content: "";
-  position: absolute;
-  left: -0.12rem;
-  top: -0.4rem;
-  width: 0.76rem;
-  height: 0.6rem;
-  border-radius: 50% 50% 0 0;
-  background: var(--premium-green);
-}
-
-.jummah-copy {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0.8rem;
-  text-align: center;
-}
-
-.jummah-title {
-  color: #665126;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.jummah-copy time {
-  margin-top: 0.35rem;
-  color: var(--premium-green-dark);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.3rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.jummah-copy small {
-  margin-top: 0.35rem;
-  color: #4f6159;
-  font-size: 0.76rem;
-  font-weight: 600;
-}
-
-.prayer-table-panel {
-  display: grid;
-  min-height: 0;
-  grid-template-rows: auto minmax(0, 1fr);
-  background: rgba(255, 253, 248, 0.97);
-}
-
-.prayer-table-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.85rem;
-  min-height: 3.1rem;
-  padding: 0.65rem 1rem;
-  color: #fffaf1;
-  background: linear-gradient(90deg, var(--premium-green-dark), var(--premium-green) 52%, var(--premium-green-dark));
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.08rem;
-  font-weight: 700;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.title-ornament {
-  color: var(--premium-gold-light);
-  font-size: 0.92rem;
-}
-
-.prayer-table {
-  width: 100%;
-  height: 100%;
-  table-layout: fixed;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-.prayer-table thead {
-  color: #273e35;
-  background: #f5efe4;
-}
-
+.prayer-table { width: 100%; height: 100%; table-layout: fixed; border-collapse: collapse; }
+.prayer-table thead { height: 2.75rem; color: #293a34; background: #f2eee5; }
+.prayer-table thead th { padding: .55rem .7rem; border-right: 1px solid var(--line); font-size: .72rem; font-weight: 850; text-transform: uppercase; letter-spacing: .1em; }
+.prayer-table tbody tr { height: 20%; border-top: 1px solid var(--line); background: rgba(255,253,248,.96); }
+.prayer-table tbody tr:nth-child(even):not(.is-next-prayer) { background: rgba(250,246,236,.96); }
 .prayer-table th,
-.prayer-table td {
-  border-right: 1px solid rgba(31, 51, 43, 0.13);
-  text-align: center;
-}
-
+.prayer-table td { border-right: 1px solid var(--line); text-align: center; }
 .prayer-table th:last-child,
-.prayer-table td:last-child {
-  border-right: 0;
-}
+.prayer-table td:last-child { border-right: 0; }
+.prayer-table tbody th { position: relative; width: 45%; padding: .7rem 1.3rem; text-align: left; }
+.prayer-table tbody td { width: 27.5%; padding: .7rem 1rem; font-family: Georgia, 'Times New Roman', serif; font-size: 2rem; font-weight: 700; }
+.prayer-name-layout { display: flex; align-items: center; gap: .75rem; }
+.prayer-row-icon { display: grid; place-items: center; width: 2.3rem; height: 2.3rem; flex: none; border: 1px solid rgba(179,138,70,.45); border-radius: 50%; color: #b1812d; font-size: 1rem; }
+.prayer-name-copy { display: flex; min-width: 0; align-items: baseline; gap: .7rem; }
+.prayer-row-main { color: var(--ink); font-size: 1.75rem; font-weight: 800; line-height: 1; }
+.prayer-row-arabic { color: #a97c2f; font-family: Georgia, 'Times New Roman', serif; font-size: 1rem; white-space: nowrap; }
+.secondary-start-time { display: block; margin-top: .15rem; color: #80642f; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: .68rem; font-weight: 700; }
 
-.prayer-table thead th {
-  height: 2.75rem;
-  padding: 0.5rem 0.75rem;
-  color: #31483e;
-  font-size: 0.66rem;
-  font-weight: 850;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.prayer-table tbody tr {
-  color: #172c24;
-  background: rgba(255, 253, 248, 0.95);
-}
-
-.prayer-table tbody tr:not(:first-child) th,
-.prayer-table tbody tr:not(:first-child) td {
-  border-top: 1px solid rgba(31, 51, 43, 0.12);
-}
-
-.prayer-table tbody tr:nth-child(even):not(.is-next-prayer) {
-  background: rgba(250, 246, 238, 0.96);
-}
-
-.prayer-table tbody th,
-.prayer-table tbody td {
-  padding: 0.7rem 1.15rem;
-  font-size: 1.75rem;
-}
-
-.prayer-table tbody th {
-  position: relative;
-  width: 45%;
-  text-align: left;
-  font-weight: 750;
-}
-
-.prayer-table tbody td {
-  width: 27.5%;
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 700;
-}
-
-.prayer-name-layout {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.prayer-row-icon {
-  display: grid;
-  width: 2.7rem;
-  height: 2.7rem;
-  flex: none;
-  place-items: center;
-  border: 1px solid rgba(184, 146, 69, 0.65);
-  border-radius: 50%;
-  color: #b17e24;
-  background: rgba(255, 253, 248, 0.7);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.35rem;
-}
-
-.prayer-name-copy {
-  display: flex;
-  min-width: 0;
-  align-items: baseline;
-  gap: 0.65rem;
-}
-
-.prayer-row-main {
-  white-space: nowrap;
-}
-
-.prayer-row-arabic {
-  color: #b07a21;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.prayer-table tbody tr.is-next-prayer {
-  position: relative;
-  color: #fffaf1;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(222, 198, 137, 0.06), transparent 42%),
-    linear-gradient(90deg, #0a5137, #06432f);
-  box-shadow:
-    inset 0 0 0 2px rgba(222, 198, 137, 0.42),
-    inset 0 0 26px rgba(0, 0, 0, 0.08);
-}
-
+.prayer-table tbody tr.is-next-prayer { color: #fff9ec; background: linear-gradient(90deg,#12613f,#0b422d); box-shadow: inset 0 0 0 1px rgba(226,193,111,.45); }
 .prayer-table tbody tr.is-next-prayer th,
-.prayer-table tbody tr.is-next-prayer td {
-  color: #fffaf1;
-  border-color: rgba(222, 198, 137, 0.28);
-}
-
-.prayer-table tbody tr.is-next-prayer .prayer-row-icon {
-  border-color: var(--premium-gold-light);
-  color: var(--premium-gold-light);
-  background: rgba(255, 255, 255, 0.035);
-}
-
+.prayer-table tbody tr.is-next-prayer td,
+.prayer-table tbody tr.is-next-prayer .prayer-row-main { color: #fff9ec; }
 .prayer-table tbody tr.is-next-prayer .prayer-row-arabic,
-.prayer-table tbody tr.is-next-prayer .secondary-start-time {
-  color: var(--premium-gold-light);
-}
+.prayer-table tbody tr.is-next-prayer .secondary-start-time { color: #e8cf95; }
+.prayer-table tbody tr.is-next-prayer .prayer-row-icon { border-color: rgba(226,193,111,.65); color: #f0ca6b; }
 
-.secondary-start-time {
-  display: block;
-  margin-top: 0.15rem;
-  color: #8a6a2e;
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.7rem;
-  font-weight: 750;
-  line-height: 1.1;
-}
-
-.display-bottom-grid {
-  display: grid;
-  min-height: 9.6rem;
-  gap: 1rem;
-}
-
+.display-bottom-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 1rem; min-height: 0; }
 .announcement-panel,
-.hadith-card {
-  min-height: 9.6rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 253, 248, 0.96);
-}
-
-.announcement-panel {
-  display: flex;
-  flex-direction: column;
-}
-
+.hadith-card { min-height: 0; padding: 1rem 1.15rem; background: rgba(255,253,248,.94); }
+.announcement-panel { display: flex; flex-direction: column; }
 .announcement-heading,
-.hadith-heading {
-  display: flex;
-  align-items: center;
-}
-
-.announcement-heading {
-  gap: 0.65rem;
-}
-
+.hadith-heading { display: flex; align-items: center; gap: .65rem; min-height: 1.5rem; color: var(--green-dark); }
 .announcement-icon,
-.hadith-book {
-  display: inline-grid;
-  width: 1.75rem;
-  height: 1.75rem;
-  place-items: center;
-  color: var(--premium-green);
-  font-size: 0.85rem;
-}
-
-.hadith-book {
-  color: var(--premium-gold);
-  font-size: 1.25rem;
-}
-
+.hadith-book { color: var(--gold); font-size: 1rem; }
 .announcement-heading h2,
-.hadith-heading > span:not(.hadith-book) {
-  margin: 0;
-  color: var(--premium-green-dark);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-}
+.hadith-heading span:not(.hadith-book) { margin: 0; font-size: .82rem; font-weight: 850; text-transform: uppercase; letter-spacing: .1em; }
+.announcement-space { display: flex; flex: 1; min-height: 0; align-items: center; margin-top: .65rem; padding-top: .6rem; border-top: 1px solid rgba(179,138,70,.3); }
+.announcement-rotator { display: flex; width: 100%; min-width: 0; align-items: center; gap: .75rem; }
+.announcement-position { flex: none; color: #7a6030; font-size: .7rem; font-weight: 700; }
+.hadith-card { display: flex; flex-direction: column; justify-content: center; }
+.hadith-heading { justify-content: flex-start; padding-bottom: .45rem; border-bottom: 1px solid rgba(179,138,70,.3); }
+.hadith-heading small { margin-left: auto; color: #80642f; font-size: .76rem; }
+.hadith-card blockquote { margin: .55rem 0 0; }
+.hadith-arabic { margin: 0; color: var(--green-dark); font-family: Georgia,'Times New Roman',serif; font-size: 1.45rem; font-weight: 700; line-height: 1.35; text-align: right; }
+.hadith-swahili { margin: .25rem 0 0; color: #53645d; font-size: .82rem; font-weight: 600; }
+.hadith-source { margin: .4rem 0 0; color: #765d30; font-size: .68rem; font-weight: 850; text-transform: uppercase; letter-spacing: .09em; }
 
-.announcement-space {
-  display: flex;
-  min-height: 0;
-  flex: 1;
-  align-items: center;
-  margin-top: 0.6rem;
-  padding-top: 0.65rem;
-  border-top: 1px solid rgba(184, 146, 69, 0.3);
-}
-
-.announcement-rotator {
-  display: flex;
-  width: 100%;
-  min-width: 0;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.announcement-position {
-  flex: none;
-  color: #84652f;
-  font-size: 0.68rem;
-  font-weight: 700;
-}
-
-.hadith-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.hadith-heading {
-  gap: 0.45rem;
-  padding-bottom: 0.45rem;
-  border-bottom: 1px solid rgba(184, 146, 69, 0.3);
-}
-
-.hadith-heading small {
-  margin-left: auto;
-  color: #8b6a31;
-  font-size: 0.75rem;
-  font-weight: 650;
-}
-
-.hadith-card blockquote {
-  margin: 0.55rem 0 0;
-}
-
-.hadith-arabic {
-  margin: 0;
-  color: var(--premium-green-dark);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  line-height: 1.35;
-  text-align: right;
-}
-
-.hadith-swahili {
-  margin: 0.35rem 0 0;
-  color: #3f544b;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.82rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.hadith-source {
-  display: inline-block;
-  width: fit-content;
-  margin: 0.45rem auto 0;
-  padding: 0.22rem 0.75rem;
-  border-radius: 999px;
-  color: #fffaf1;
-  background: var(--premium-green-dark);
-  font-size: 0.61rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-@media (min-width: 768px) {
-  .prayer-display-header {
-    grid-template-columns: 1fr 1.42fr 1fr;
-  }
-
-  .prayer-display-header-date {
-    justify-content: flex-start;
-  }
-
-  .prayer-display-header-clock {
-    justify-content: flex-end;
-  }
-
-  .display-date {
-    text-align: left;
-  }
-
-  .display-clock {
-    align-items: flex-end;
-    text-align: right;
-  }
-
-  .prayer-display-main {
-    grid-template-columns: minmax(16rem, 0.58fr) minmax(0, 2.42fr);
-  }
-
-  .display-bottom-grid {
-    grid-template-columns: 1.15fr 0.85fr;
-  }
-}
-
-@media (min-width: 1280px) {
-  .prayer-display-shell {
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  .prayer-display-header {
-    height: 7.65rem;
-    grid-template-columns: 1fr 1.5fr 1fr;
-    padding: 0.85rem 3.2rem;
-  }
-
-  .display-date-gregorian {
-    font-size: 1.5rem;
-  }
-
-  .display-date-hijri {
-    font-size: 0.98rem;
-  }
-
-  .display-mosque-logo {
-    width: 4.75rem;
-    height: 4.75rem;
-  }
-
-  .display-mosque-name {
-    max-width: 37rem;
-    font-size: 2.35rem;
-  }
-
-  .display-mosque-location {
-    max-width: 37rem;
-    font-size: 1rem;
-  }
-
-  .display-clock-time {
-    font-size: 3.9rem;
-  }
-
-  .prayer-display-main {
-    height: calc(100vh - 7.65rem);
-    grid-template-columns: 19.5rem minmax(0, 1fr);
-    gap: 1rem;
-    padding: 1rem 3.2rem 1.15rem;
-  }
-
-  .prayer-display-sidebar {
-    grid-template-rows: minmax(0, 1fr) 9rem;
-  }
-
-  .prayer-display-content {
-    grid-template-rows: minmax(0, 1fr) 10.25rem;
-  }
-
-  .next-prayer-card {
-    min-height: 0;
-  }
-
-  .next-prayer-symbol {
-    width: 4.4rem;
-    height: 4.4rem;
-  }
-
-  .next-prayer-name {
-    font-size: 2.25rem;
-  }
-
-  .next-prayer-countdown-value {
-    font-size: 3rem;
-  }
-
-  .next-prayer-start strong {
-    font-size: 2.75rem;
-  }
-
-  .prayer-table-title {
-    min-height: 3.2rem;
-    font-size: 1.12rem;
-  }
-
-  .prayer-table thead th {
-    height: 2.55rem;
-    font-size: 0.65rem;
-  }
-
-  .prayer-table tbody th,
-  .prayer-table tbody td {
-    padding: 0.55rem 1.25rem;
-    font-size: 1.9rem;
-  }
-
-  .prayer-row-icon {
-    width: 2.85rem;
-    height: 2.85rem;
-  }
-
-  .prayer-row-arabic {
-    font-size: 1.18rem;
-  }
+@media (max-width: 1100px) {
+  .prayer-display-header { grid-template-columns: 1fr 1.2fr 1fr; padding-left: 1.3rem; padding-right: 1.3rem; }
+  .display-mosque-name { font-size: 1.75rem; }
+  .display-clock-time { font-size: 3rem; }
+  .prayer-display-main { grid-template-columns: 17rem minmax(0,1fr); padding-left: 1rem; padding-right: 1rem; }
+  .prayer-table tbody td { font-size: 1.55rem; }
+  .prayer-row-main { font-size: 1.4rem; }
 }
 
 @media (max-width: 767px) {
-  .prayer-display-main {
-    grid-template-columns: 1fr;
-  }
-
-  .display-bottom-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .prayer-name-copy {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.1rem;
-  }
-
-  .prayer-row-arabic {
-    font-size: 0.9rem;
-  }
+  .prayer-display-shell { overflow: auto; }
+  .prayer-display-header { grid-template-columns: 1fr; min-height: 0; text-align: center; }
+  .prayer-display-header-date,.prayer-display-header-clock,.prayer-display-header-mosque { justify-content: center; }
+  .display-date,.display-clock { align-items: center; text-align: center; }
+  .prayer-display-main { height: auto; grid-template-columns: 1fr; padding: 1rem; }
+  .prayer-display-sidebar,.prayer-display-content { grid-template-rows: auto; }
+  .display-bottom-grid { grid-template-columns: 1fr; }
+  .prayer-table tbody td { font-size: 1.1rem; }
+  .prayer-row-main { font-size: 1.05rem; }
+  .prayer-row-arabic { display: none; }
 }
