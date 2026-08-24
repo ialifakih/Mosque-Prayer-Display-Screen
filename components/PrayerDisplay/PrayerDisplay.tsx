@@ -14,12 +14,12 @@ import type { DailyPrayerTime } from "@/types/DailyPrayerTimeType"
 import type { JummahTimes } from "@/types/JummahTimesType"
 import Announcement from "@/components/Announcement/Announcement"
 
-const PRAYER_NAMES = [
-  "Fajr / Alfajiri",
-  "Dhuhr / Adhuhuri",
-  "Asr / Alasiri",
-  "Maghrib / Magharibi",
-  "Isha / Aisha",
+const PRAYER_ROWS = [
+  { label: "Fajr / Alfajiri", arabic: "الفجر", icon: "◒" },
+  { label: "Dhuhr / Adhuhuri", arabic: "الظهر", icon: "☀" },
+  { label: "Asr / Alasiri", arabic: "العصر", icon: "◉" },
+  { label: "Maghrib / Magharibi", arabic: "المغرب", icon: "◓" },
+  { label: "Isha / Aisha", arabic: "العشاء", icon: "☾" },
 ]
 
 const FEATURED_HADITH = {
@@ -80,15 +80,11 @@ export default function PrayerDisplay({
 }) {
   const prayers = useMemo<PrayerDisplayRow[]>(
     () => [
-      { label: PRAYER_NAMES[0], data: today.fajr, tomorrow: tomorrow.fajr },
-      { label: PRAYER_NAMES[1], data: today.zuhr, tomorrow: tomorrow.zuhr },
-      { label: PRAYER_NAMES[2], data: today.asr, tomorrow: tomorrow.asr },
-      {
-        label: PRAYER_NAMES[3],
-        data: today.maghrib,
-        tomorrow: tomorrow.maghrib,
-      },
-      { label: PRAYER_NAMES[4], data: today.isha, tomorrow: tomorrow.isha },
+      { ...PRAYER_ROWS[0], data: today.fajr, tomorrow: tomorrow.fajr },
+      { ...PRAYER_ROWS[1], data: today.zuhr, tomorrow: tomorrow.zuhr },
+      { ...PRAYER_ROWS[2], data: today.asr, tomorrow: tomorrow.asr },
+      { ...PRAYER_ROWS[3], data: today.maghrib, tomorrow: tomorrow.maghrib },
+      { ...PRAYER_ROWS[4], data: today.isha, tomorrow: tomorrow.isha },
     ],
     [today, tomorrow],
   )
@@ -120,45 +116,56 @@ export default function PrayerDisplay({
       <aside className="prayer-display-sidebar" aria-label="Sala inayofuata">
         <section className="next-prayer-card">
           <div className="next-prayer-heading">
-            <p className="display-kicker">Next Prayer / Sala Inayofuata</p>
+            <p>Next Prayer</p>
+            <strong>Sala Inayofuata</strong>
           </div>
 
-          <div className="next-prayer-name">{nextPrayer.label}</div>
+          <div className="next-prayer-hero">
+            <div className="next-prayer-symbol" aria-hidden="true">
+              {nextPrayer.icon}
+            </div>
+            <div className="next-prayer-name">{nextPrayer.label}</div>
+            <div className="next-prayer-in-label">Muda hadi Jamaa</div>
+            <time className="next-prayer-countdown-value tabular-nums" aria-live="polite">
+              {countdown}
+            </time>
+          </div>
 
           <div className="next-prayer-start">
             <span>Mwanzo</span>
             <strong>{dtFormatTimeTo12h(nextPrayerData.start)}</strong>
           </div>
-
-          <div className="next-prayer-countdown">
-            <span>Jamaa baada ya</span>
-            <time className="tabular-nums" aria-live="polite">
-              {countdown}
-            </time>
-          </div>
         </section>
 
         <section className="jummah-card" aria-label="Swala ya Ijumaa">
-          <div className="jummah-label">
-            <span>Jummah / Ijumaa</span>
-            <small>صلاة الجمعة</small>
+          <div className="jummah-art" aria-hidden="true">
+            <span className="jummah-dome" />
+            <span className="jummah-minaret" />
           </div>
-          <time className="tabular-nums">
-            {jummahTime ? dtFormatTimeTo12h(jummahTime) : "—"}
-          </time>
+          <div className="jummah-copy">
+            <div className="jummah-title">Jummah / Ijumaa</div>
+            <time className="tabular-nums">
+              {jummahTime ? dtFormatTimeTo12h(jummahTime) : "—"}
+            </time>
+            <small>Swala ya Ijumaa</small>
+          </div>
         </section>
       </aside>
 
       <div className="prayer-display-content">
         <section className="prayer-table-panel" aria-label="Nyakati za sala">
-          <div className="prayer-table-title">Prayer Times / Nyakati za Sala</div>
+          <div className="prayer-table-title">
+            <span className="title-ornament" aria-hidden="true">✦</span>
+            <span>Prayer Times / Nyakati za Sala</span>
+            <span className="title-ornament" aria-hidden="true">✦</span>
+          </div>
           <PrayerTimes prayers={prayers} nextPrayerTime={nextPrayerTime} />
         </section>
 
         <div className="display-bottom-grid">
           <section className="announcement-panel" aria-label="Matangazo">
             <div className="announcement-heading">
-              <span className="announcement-mark" aria-hidden="true" />
+              <span className="announcement-icon" aria-hidden="true">●</span>
               <h2>Announcement / Tangazo</h2>
             </div>
             <div className="announcement-space">
@@ -168,6 +175,7 @@ export default function PrayerDisplay({
 
           <section className="hadith-card" aria-label="Hadith ya siku">
             <div className="hadith-heading">
+              <span className="hadith-book" aria-hidden="true">▤</span>
               <span>Hadith ya siku</span>
               <small>حديث اليوم</small>
             </div>
