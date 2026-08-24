@@ -3,6 +3,8 @@ import type { PrayerTime } from "@/types/DailyPrayerTimeType"
 
 export type PrayerDisplayRow = {
   label: string
+  arabic?: string
+  icon?: string
   data: PrayerTime
   tomorrow: PrayerTime
 }
@@ -18,9 +20,9 @@ export default function PrayerTimes({
     <table className="prayer-table">
       <thead>
         <tr>
-          <th>Sala</th>
-          <th>Mwanzo</th>
-          <th>Jamaa</th>
+          <th>Prayer / Sala</th>
+          <th>Adhan Time / Mwanzo</th>
+          <th>Jamaa / Iqamah</th>
         </tr>
       </thead>
       <tbody>
@@ -33,14 +35,26 @@ export default function PrayerTimes({
               className={isNextPrayer ? "is-next-prayer" : undefined}
             >
               <th scope="row">
-                <span>{prayer.label}</span>
+                <span className="prayer-name-layout">
+                  <span className="prayer-row-icon" aria-hidden="true">
+                    {prayer.icon}
+                  </span>
+                  <span className="prayer-name-copy">
+                    <span className="prayer-row-main">{prayer.label}</span>
+                    {prayer.arabic && (
+                      <span className="prayer-row-arabic" dir="rtl">
+                        {prayer.arabic}
+                      </span>
+                    )}
+                  </span>
+                </span>
               </th>
               <td className="tabular-nums">
                 {dtFormatTimeTo12h(prayer.data.start)}
                 {prayer.data.start_secondary &&
                 prayer.data.start !== prayer.data.start_secondary ? (
                   <span className="secondary-start-time">
-                    {dtFormatTimeTo12h(prayer.data.start_secondary)}
+                    Hanafi {dtFormatTimeTo12h(prayer.data.start_secondary)}
                   </span>
                 ) : null}
               </td>
