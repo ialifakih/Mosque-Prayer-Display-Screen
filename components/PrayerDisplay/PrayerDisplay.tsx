@@ -116,8 +116,8 @@ export default function PrayerDisplay({
       <aside className="prayer-display-sidebar" aria-label="Sala inayofuata">
         <section className="next-prayer-card">
           <div className="next-prayer-heading">
-            <p>Sala Inayofuata</p>
-            <strong>Next Prayer</strong>
+            <p>Next Prayer</p>
+            <strong>Sala Inayofuata</strong>
           </div>
 
           <div className="next-prayer-hero">
@@ -159,11 +159,11 @@ export default function PrayerDisplay({
             <span className="jummah-minaret" />
           </div>
           <div className="jummah-copy">
-            <div className="jummah-title">Swala ya Ijumaa</div>
+            <div className="jummah-title">Jummah / Ijumaa</div>
             <time className="tabular-nums">
               {jummahTime ? dtFormatTimeTo12h(jummahTime) : "—"}
             </time>
-            <small>Jummah / Ijumaa</small>
+            <small>Swala ya Ijumaa</small>
           </div>
         </section>
       </aside>
@@ -172,7 +172,7 @@ export default function PrayerDisplay({
         <section className="prayer-table-panel" aria-label="Nyakati za sala">
           <div className="prayer-table-title">
             <span className="title-ornament" aria-hidden="true">✦</span>
-            <span>Nyakati za Sala</span>
+            <span>Prayer Times / Nyakati za Sala</span>
             <span className="title-ornament" aria-hidden="true">✦</span>
           </div>
           <PrayerTimes prayers={prayers} nextPrayerTime={nextPrayerTime} />
