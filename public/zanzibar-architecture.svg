@@ -1,77 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 1080" role="img" aria-label="Zanzibar mosque architectural illustration">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#f5ead3"/>
-      <stop offset="0.48" stop-color="#ead4ab"/>
-      <stop offset="1" stop-color="#c9a568"/>
-    </linearGradient>
-    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0b422d"/>
-      <stop offset="1" stop-color="#12613f"/>
-    </linearGradient>
-    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#fffaf0"/>
-      <stop offset="1" stop-color="#e4c98f"/>
-    </linearGradient>
-    <pattern id="geo" width="42" height="42" patternUnits="userSpaceOnUse">
-      <path d="M21 1 41 21 21 41 1 21Z" fill="none" stroke="#b38a46" stroke-width="1" opacity=".18"/>
-      <circle cx="21" cy="21" r="8" fill="none" stroke="#12613f" stroke-width="1" opacity=".10"/>
+    <pattern id="geo" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M27 2 52 27 27 52 2 27Z M27 10 44 27 27 44 10 27Z" fill="none" stroke="#b38a46" stroke-width="1" opacity=".12"/>
     </pattern>
-    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="12"/>
-    </filter>
+    <linearGradient id="edgeL" x1="0" x2="1"><stop offset="0" stop-color="#c9a568" stop-opacity=".28"/><stop offset="1" stop-color="#c9a568" stop-opacity="0"/></linearGradient>
+    <linearGradient id="edgeR" x1="1" x2="0"><stop offset="0" stop-color="#c9a568" stop-opacity=".28"/><stop offset="1" stop-color="#c9a568" stop-opacity="0"/></linearGradient>
   </defs>
+  <rect width="1920" height="1080" fill="#f7f3ea"/>
+  <rect width="1920" height="1080" fill="url(#geo)"/>
+  <rect width="210" height="1080" fill="url(#edgeL)"/>
+  <rect x="1710" width="210" height="1080" fill="url(#edgeR)"/>
 
-  <rect width="420" height="1080" fill="url(#sky)"/>
-  <rect width="420" height="1080" fill="url(#geo)"/>
-  <circle cx="82" cy="130" r="120" fill="#fff8e9" opacity=".55" filter="url(#soft)"/>
-
-  <path d="M0 0h94v1080H0z" fill="#0b422d" opacity=".92"/>
-  <path d="M94 0h8v1080h-8z" fill="#b38a46" opacity=".85"/>
-
-  <path d="M112 0c58 42 98 102 117 180 18 76 54 132 109 168V0z" fill="#fffaf0" opacity=".34"/>
-  <path d="M112 1080V760c28-110 94-181 198-214 50-16 82-47 110-101v635z" fill="#fffaf0" opacity=".42"/>
-
-  <g transform="translate(102 238)">
-    <rect x="24" y="215" width="58" height="428" rx="8" fill="url(#stone)"/>
-    <rect x="36" y="86" width="34" height="151" rx="5" fill="url(#stone)"/>
-    <path d="M31 86h44L53 25z" fill="#b38a46"/>
-    <circle cx="53" cy="17" r="8" fill="#0b422d"/>
-    <path d="M49 7c0-8 8-13 15-9-5 0-8 4-8 8 0 4 3 8 8 8-8 4-15-1-15-7Z" fill="#b38a46"/>
-    <rect x="22" y="260" width="62" height="11" fill="#b38a46" opacity=".65"/>
-    <rect x="21" y="372" width="64" height="10" fill="#b38a46" opacity=".55"/>
-    <rect x="21" y="500" width="64" height="10" fill="#b38a46" opacity=".55"/>
-    <g fill="#12613f" opacity=".92">
-      <rect x="38" y="118" width="9" height="27" rx="4"/>
-      <rect x="58" y="118" width="9" height="27" rx="4"/>
-      <rect x="37" y="302" width="10" height="40" rx="5"/>
-      <rect x="58" y="302" width="10" height="40" rx="5"/>
-      <rect x="37" y="414" width="10" height="40" rx="5"/>
-      <rect x="58" y="414" width="10" height="40" rx="5"/>
-    </g>
+  <g fill="none" stroke="#b38a46" opacity=".34">
+    <path d="M28 1080V332c0-102 52-185 126-232 75 47 126 130 126 232v748" stroke-width="5"/>
+    <path d="M1640 1080V332c0-102 52-185 126-232 75 47 126 130 126 232v748" stroke-width="5"/>
+    <path d="M82 1080V392c0-74 34-137 85-178 51 41 85 104 85 178v688" stroke-width="2"/>
+    <path d="M1668 1080V392c0-74 34-137 85-178 51 41 85 104 85 178v688" stroke-width="2"/>
   </g>
 
-  <g transform="translate(118 630)">
-    <rect x="0" y="140" width="302" height="280" fill="url(#stone)"/>
-    <path d="M20 140c18-90 95-142 151-142 58 0 135 52 154 142z" fill="url(#green)"/>
-    <path d="M142 4h56l-28-68z" fill="#b38a46"/>
-    <circle cx="170" cy="-73" r="7" fill="#0b422d"/>
-    <path d="M166-83c0-8 7-13 14-9-5 0-8 4-8 8 0 4 3 8 8 8-8 4-14-1-14-7Z" fill="#b38a46"/>
-    <g fill="#12613f">
-      <path d="M28 420V240c0-45 34-80 76-80s76 35 76 80v180Z" opacity=".86"/>
-      <path d="M170 420V265c0-38 29-68 65-68s65 30 65 68v155Z" opacity=".72"/>
-    </g>
-    <g fill="#fff8e9" opacity=".84">
-      <path d="M61 420V286c0-25 18-44 42-44s42 19 42 44v134Z"/>
-      <path d="M205 420V306c0-21 15-38 36-38s36 17 36 38v114Z"/>
-    </g>
+  <g fill="#12613f" opacity=".12">
+    <path d="M22 1080V758h42V535h20V388h22v147h20v223h42v322Z"/>
+    <path d="M1752 1080V758h42V535h20V388h22v147h20v223h42v322Z"/>
+    <path d="M0 1080V916c52-56 109-56 164 0v164Z"/>
+    <path d="M1756 1080V916c52-56 109-56 164 0v164Z"/>
   </g>
 
-  <g fill="#0b422d" opacity=".90">
-    <path d="M16 1010c22-91 33-130 46-126 13 4 10 54 0 132z"/>
-    <path d="M47 910c-52-26-66-56-41-86 33 0 58 23 75 69-5-52 10-87 45-103 30 16 26 52-12 110 43-26 77-20 99 13-15 35-60 42-130 19z"/>
+  <g fill="#b38a46" opacity=".18">
+    <path d="M88 389h10v-54H88zM79 335h28l-14-26z"/><circle cx="93" cy="302" r="5"/>
+    <path d="M1822 389h10v-54h-10zM1813 335h28l-14-26z"/><circle cx="1827" cy="302" r="5"/>
   </g>
 
-  <rect x="102" y="0" width="318" height="1080" fill="url(#green)" opacity=".05"/>
-  <path d="M110 1034h302" stroke="#b38a46" stroke-width="2" opacity=".55"/>
+  <g fill="#12613f" opacity=".075">
+    <path d="M660 1080v-96h40v-48h18v48h40v96z"/>
+    <path d="M730 1080V968c0-44 44-78 95-78s95 34 95 78v112Z"/>
+    <path d="M906 1080v-82h30v-70h16v70h30v82z"/>
+    <path d="M972 1080v-102c0-38 38-68 82-68s82 30 82 68v102Z"/>
+    <path d="M1118 1080v-78h28v-60h15v60h28v78z"/>
+  </g>
+
+  <path d="M0 1036h1920v44H0z" fill="#0b422d" opacity=".92"/>
+  <path d="M0 1036h1920" stroke="#b38a46" stroke-width="4"/>
+  <g opacity=".35" stroke="#b38a46" fill="none">
+    <path d="M0 1058h730M1190 1058h730" stroke-width="2"/>
+    <path d="M960 1042l24 16-24 16-24-16z" stroke-width="3"/>
+  </g>
 </svg>
