@@ -20,9 +20,9 @@ export default function PrayerTimes({
     <table className="prayer-table">
       <thead>
         <tr>
-          <th>Sala</th>
-          <th>Mwanzo</th>
-          <th>Jamaa</th>
+          <th>Sala / Prayer</th>
+          <th>Mwanzo / Adhan</th>
+          <th>Jamaa / Iqamah</th>
         </tr>
       </thead>
       <tbody>
