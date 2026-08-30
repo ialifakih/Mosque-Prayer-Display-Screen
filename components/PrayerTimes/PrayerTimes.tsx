@@ -28,6 +28,8 @@ export default function PrayerTimes({
       <tbody>
         {prayers.map((prayer, index) => {
           const isNextPrayer = nextPrayerTime.prayerIndex === index
+          const displayPrayer =
+            isNextPrayer && !nextPrayerTime.today ? prayer.tomorrow : prayer.data
 
           return (
             <tr
@@ -46,20 +48,23 @@ export default function PrayerTimes({
                         {prayer.arabic}
                       </span>
                     )}
+                    {isNextPrayer && !nextPrayerTime.today && (
+                      <span className="prayer-row-tomorrow">Kesho</span>
+                    )}
                   </span>
                 </span>
               </th>
               <td className="tabular-nums">
-                {dtFormatTimeTo12h(prayer.data.start)}
-                {prayer.data.start_secondary &&
-                prayer.data.start !== prayer.data.start_secondary ? (
+                {dtFormatTimeTo12h(displayPrayer.start)}
+                {displayPrayer.start_secondary &&
+                displayPrayer.start !== displayPrayer.start_secondary ? (
                   <span className="secondary-start-time">
-                    Hanafi {dtFormatTimeTo12h(prayer.data.start_secondary)}
+                    Hanafi {dtFormatTimeTo12h(displayPrayer.start_secondary)}
                   </span>
                 ) : null}
               </td>
               <td className="tabular-nums font-bold">
-                {dtFormatTimeTo12h(prayer.data.congregation_start)}
+                {dtFormatTimeTo12h(displayPrayer.congregation_start)}
               </td>
             </tr>
           )
