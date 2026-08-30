@@ -116,15 +116,23 @@ export default function PrayerDisplay({
       <aside className="prayer-display-sidebar" aria-label="Sala inayofuata">
         <section className="next-prayer-card">
           <div className="next-prayer-heading">
-            <p>Next Prayer</p>
             <strong>Sala Inayofuata</strong>
+            <p>Next Prayer</p>
           </div>
 
           <div className="next-prayer-hero">
             <div className="next-prayer-symbol" aria-hidden="true">
               {nextPrayer.icon}
             </div>
-            <div className="next-prayer-name">{nextPrayer.label}</div>
+
+            <div className="next-prayer-name-wrap">
+              <div className="next-prayer-name">{nextPrayer.label}</div>
+              {nextPrayer.arabic && (
+                <div className="next-prayer-arabic" dir="rtl">
+                  {nextPrayer.arabic}
+                </div>
+              )}
+            </div>
 
             <div className="next-prayer-times">
               <div className="next-prayer-time">
@@ -172,7 +180,7 @@ export default function PrayerDisplay({
         <section className="prayer-table-panel" aria-label="Nyakati za sala">
           <div className="prayer-table-title">
             <span className="title-ornament" aria-hidden="true">✦</span>
-            <span>Prayer Times / Nyakati za Sala</span>
+            <span>Nyakati za Sala / Prayer Times</span>
             <span className="title-ornament" aria-hidden="true">✦</span>
           </div>
           <PrayerTimes prayers={prayers} nextPrayerTime={nextPrayerTime} />
@@ -181,7 +189,7 @@ export default function PrayerDisplay({
         <div className="display-bottom-grid">
           <section className="announcement-panel" aria-label="Matangazo">
             <div className="announcement-heading">
-              <span className="announcement-icon" aria-hidden="true">●</span>
+              <span className="announcement-icon" aria-hidden="true">◆</span>
               <h2>Tangazo</h2>
             </div>
             <div className="announcement-space">
