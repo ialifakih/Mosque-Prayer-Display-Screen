@@ -53,6 +53,19 @@ describe("public announcement rotator", () => {
     expect(screen.queryByLabelText(/Announcement 1 of/)).not.toBeInTheDocument()
   })
 
+  it("shows a useful default when there are no active announcements", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ announcements: [] }),
+    }) as typeof fetch
+
+    render(<Announcement />)
+    await flushFetch()
+
+    expect(screen.getByText("Karibu Msikitini")).toBeVisible()
+    expect(screen.getByText(/simu katika hali ya kimya/i)).toBeVisible()
+  })
+
   it("rotates multiple announcements every 13 seconds and refetches at 60 seconds", async () => {
     const fetchMock = jest.fn().mockResolvedValue({
       ok: true,

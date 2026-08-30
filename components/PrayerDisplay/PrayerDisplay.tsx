@@ -13,7 +13,9 @@ import {
 } from "@/services/PrayerTimeService"
 import type { DailyPrayerTime } from "@/types/DailyPrayerTimeType"
 import type { JummahTimes } from "@/types/JummahTimesType"
-import Announcement from "@/components/Announcement/Announcement"
+import Announcement, {
+  AnnouncementEmptyState,
+} from "@/components/Announcement/Announcement"
 
 const PRAYER_ROWS = [
   { label: "Fajr / Alfajiri", arabic: "الفجر", icon: "◒" },
@@ -200,7 +202,7 @@ export default function PrayerDisplay({
               <h2>Tangazo</h2>
             </div>
             <div className="announcement-space">
-              {announcementEnabled && <Announcement />}
+              {announcementEnabled ? <Announcement /> : <AnnouncementEmptyState />}
             </div>
           </section>
 
@@ -214,7 +216,7 @@ export default function PrayerDisplay({
               <p className="hadith-arabic" dir="rtl">{featuredHadith.arabic}</p>
               <p className="hadith-swahili">“{featuredHadith.swahili}”</p>
             </blockquote>
-            <p className="hadith-source">{featuredHadith.source}</p>
+            <cite className="hadith-source">{featuredHadith.source}</cite>
           </section>
         </div>
       </div>

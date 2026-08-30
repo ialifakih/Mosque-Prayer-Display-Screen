@@ -9,6 +9,19 @@ import { useEffect, useState } from "react"
 
 const ROTATION_INTERVAL_MS = 13_000
 const REFRESH_INTERVAL_MS = 60_000
+const DEFAULT_ANNOUNCEMENT = {
+  title: "Karibu Msikitini",
+  message:
+    "Tafadhali weka simu katika hali ya kimya na udumishe utulivu ndani ya msikiti.",
+}
+
+export function AnnouncementEmptyState() {
+  return (
+    <div className="announcement-rotator announcement-empty-state">
+      <AnnouncementCard announcement={DEFAULT_ANNOUNCEMENT} />
+    </div>
+  )
+}
 
 export default function Announcement() {
   const [announcements, setAnnouncements] = useState<AnnouncementRecord[]>([])
@@ -54,7 +67,7 @@ export default function Announcement() {
   }, [announcements.length])
 
   const announcement = announcements[currentIndex]
-  if (announcement == null) return null
+  if (announcement == null) return <AnnouncementEmptyState />
 
   return (
     <div aria-live="polite" className="announcement-rotator">
