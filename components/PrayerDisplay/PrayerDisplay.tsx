@@ -5,6 +5,7 @@ import PrayerTimes, {
   type PrayerDisplayRow,
 } from "@/components/PrayerTimes/PrayerTimes"
 import { dtFormatTimeTo12h, dtNowLocale } from "@/lib/datetimeUtils"
+import { getHadithOfDay } from "@/lib/hadithOfDay"
 import {
   getNextPrayer,
   getPrayerTimeOnDay,
@@ -21,12 +22,6 @@ const PRAYER_ROWS = [
   { label: "Maghrib / Magharibi", arabic: "المغرب", icon: "◓" },
   { label: "Isha / Aisha", arabic: "العشاء", icon: "☾" },
 ]
-
-const FEATURED_HADITH = {
-  arabic: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ",
-  swahili: "Hakika matendo yanategemea nia.",
-  source: "Sahih al-Bukhari 1",
-}
 
 function formatCountdown(totalSeconds: number) {
   const hours = Math.floor(totalSeconds / 3600)
@@ -94,6 +89,7 @@ export default function PrayerDisplay({
     prayerTime: today.fajr,
     countdown: "00:00:00",
   }))
+  const [featuredHadith, setFeaturedHadith] = useState(() => getHadithOfDay())
 
   useEffect(() => {
     const updateNextPrayer = () => {
@@ -105,6 +101,17 @@ export default function PrayerDisplay({
 
     return () => clearInterval(interval)
   }, [today, tomorrow])
+
+  useEffect(() => {
+    const updateHadith = () => {
+      setFeaturedHadith(getHadithOfDay())
+    }
+
+    updateHadith()
+    const interval = window.setInterval(updateHadith, 60_000)
+
+    return () => window.clearInterval(interval)
+  }, [])
 
   const { countdown, nextPrayerTime, prayerTime: nextPrayerData } =
     nextPrayerDisplay
@@ -204,10 +211,10 @@ export default function PrayerDisplay({
               <small>حديث اليوم</small>
             </div>
             <blockquote>
-              <p className="hadith-arabic" dir="rtl">{FEATURED_HADITH.arabic}</p>
-              <p className="hadith-swahili">“{FEATURED_HADITH.swahili}”</p>
+              <p className="hadith-arabic" dir="rtl">{featuredHadith.arabic}</p>
+              <p className="hadith-swahili">“{featuredHadith.swahili}”</p>
             </blockquote>
-            <p className="hadith-source">{FEATURED_HADITH.source}</p>
+            <p className="hadith-source">{featuredHadith.source}</p>
           </section>
         </div>
       </div>
