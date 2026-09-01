@@ -2,6 +2,7 @@
 
 import { AnnouncementCard } from "@/components/Announcement/AnnouncementCard"
 import type {
+  AnnouncementInput,
   AnnouncementRecord,
   PublicAnnouncementsResponse,
 } from "@/types/AnnouncementType"
@@ -14,6 +15,8 @@ const DEFAULT_ANNOUNCEMENT = {
   message:
     "Tafadhali weka simu katika hali ya kimya na udumishe utulivu ndani ya msikiti.",
 }
+
+type AnnouncementSlide = Pick<AnnouncementInput, "title" | "message">
 
 export function AnnouncementEmptyState() {
   return (
@@ -57,27 +60,32 @@ export default function Announcement() {
     }
   }, [])
 
+  const slides: AnnouncementSlide[] =
+    announcements.length > 0
+      ? [...announcements, DEFAULT_ANNOUNCEMENT]
+      : [DEFAULT_ANNOUNCEMENT]
+
   useEffect(() => {
-    if (announcements.length < 2) return
+    if (slides.length < 2) return
 
     const rotationInterval = window.setInterval(() => {
-      setCurrentIndex((index) => (index + 1) % announcements.length)
+      setCurrentIndex((index) => (index + 1) % slides.length)
     }, ROTATION_INTERVAL_MS)
     return () => window.clearInterval(rotationInterval)
-  }, [announcements.length])
+  }, [slides.length])
 
-  const announcement = announcements[currentIndex]
-  if (announcement == null) return <AnnouncementEmptyState />
+  const safeIndex = currentIndex % slides.length
+  const announcement = slides[safeIndex]
 
   return (
     <div aria-live="polite" className="announcement-rotator">
       <AnnouncementCard announcement={announcement} />
-      {announcements.length > 1 && (
+      {slides.length > 1 && (
         <p
           className="announcement-position"
-          aria-label={`Announcement ${currentIndex + 1} of ${announcements.length}`}
+          aria-label={`Announcement ${safeIndex + 1} of ${slides.length}`}
         >
-          {currentIndex + 1} / {announcements.length}
+          {safeIndex + 1} / {slides.length}
         </p>
       )}
     </div>
