@@ -2,9 +2,30 @@ import {
   DailyPrayerTime,
   PrayerTime,
 } from "@/types/DailyPrayerTimeType"
+import type { JummahTimes } from "@/types/JummahTimesType"
 import { dtLocale, dtNowLocale } from "@/lib/datetimeUtils"
+import type { Moment } from "moment"
 
-const blackoutPeriod = process.env.NEXT_PUBLIC_BLACKOUT_PERIOD ?? 13 // defaults to 13 minutes
+const configuredBlackoutPeriod = Number(
+  process.env.NEXT_PUBLIC_BLACKOUT_PERIOD ?? 13,
+)
+const blackoutPeriod =
+  Number.isFinite(configuredBlackoutPeriod) && configuredBlackoutPeriod >= 0
+    ? configuredBlackoutPeriod
+    : 13
+
+export type JamaaState = {
+  key: "fajr" | "dhuhr" | "jummah" | "asr" | "maghrib" | "isha"
+  label: string
+  arabic: string
+  startTime: string
+  elapsedSeconds: number
+  durationMinutes: number
+}
+
+type JamaaEntry = Pick<JamaaState, "key" | "label" | "arabic"> & {
+  time: string
+}
 
 export function getPrayerTimeOnDay(
   time: string,
@@ -20,28 +41,101 @@ export function getPrayerTimeOnDay(
   })
 }
 
-export function isBlackout(prayerTimes: DailyPrayerTime) {
-  const currentTime = dtNowLocale()
-  const congregationTimes = [
-    prayerTimes.fajr.congregation_start,
-    prayerTimes.zuhr.congregation_start,
-    prayerTimes.asr.congregation_start,
-    prayerTimes.maghrib.congregation_start,
-    prayerTimes.isha.congregation_start,
+function getJamaaEntries(
+  prayerTimes: DailyPrayerTime,
+  jummahTimes: JummahTimes,
+  currentTime: Moment,
+): JamaaEntry[] {
+  const isFriday = currentTime.day() === 5
+  const fridayEntries: JamaaEntry[] =
+    isFriday && jummahTimes.length > 0
+      ? jummahTimes.map((jummah, index) => ({
+          key: "jummah" as const,
+          label:
+            jummahTimes.length > 1
+              ? jummah.label?.trim() || `Jummah ${index + 1}`
+              : "Jummah / Ijumaa",
+          arabic: "الجمعة",
+          time: jummah.time,
+        }))
+      : [
+          {
+            key: "dhuhr" as const,
+            label: "Dhuhr / Adhuhuri",
+            arabic: "الظهر",
+            time: prayerTimes.zuhr.congregation_start,
+          },
+        ]
+
+  return [
+    {
+      key: "fajr",
+      label: "Fajr / Alfajiri",
+      arabic: "الفجر",
+      time: prayerTimes.fajr.congregation_start,
+    },
+    ...fridayEntries,
+    {
+      key: "asr",
+      label: "Asr / Alasiri",
+      arabic: "العصر",
+      time: prayerTimes.asr.congregation_start,
+    },
+    {
+      key: "maghrib",
+      label: "Maghrib / Magharibi",
+      arabic: "المغرب",
+      time: prayerTimes.maghrib.congregation_start,
+    },
+    {
+      key: "isha",
+      label: "Isha / Aisha",
+      arabic: "العشاء",
+      time: prayerTimes.isha.congregation_start,
+    },
   ]
+}
 
-  let setBlackoutMode = false
+export function getActiveJamaaState(
+  prayerTimes: DailyPrayerTime,
+  jummahTimes: JummahTimes = [],
+  currentTime: Moment = dtNowLocale(),
+): JamaaState | null {
+  const entries = getJamaaEntries(prayerTimes, jummahTimes, currentTime)
 
-  congregationTimes.forEach((time) => {
+  for (const entry of entries) {
+    if (!entry.time) continue
+
+    const jamaahTime = getPrayerTimeOnDay(entry.time, currentTime)
+    if (!jamaahTime.isValid()) continue
+
+    const jamaahEnds = jamaahTime.clone().add(blackoutPeriod, "minutes")
     if (
-      currentTime >= dtLocale(time, ["HH:mm"]) &&
-      currentTime <= dtLocale(time, ["HH:mm"]).add(blackoutPeriod, "m")
+      currentTime.isSameOrAfter(jamaahTime) &&
+      currentTime.isBefore(jamaahEnds)
     ) {
-      setBlackoutMode = true
+      return {
+        key: entry.key,
+        label: entry.label,
+        arabic: entry.arabic,
+        startTime: entry.time,
+        elapsedSeconds: Math.max(
+          0,
+          currentTime.diff(jamaahTime, "seconds"),
+        ),
+        durationMinutes: blackoutPeriod,
+      }
     }
-  })
+  }
 
-  return setBlackoutMode
+  return null
+}
+
+export function isBlackout(
+  prayerTimes: DailyPrayerTime,
+  jummahTimes: JummahTimes = [],
+) {
+  return getActiveJamaaState(prayerTimes, jummahTimes) != null
 }
 
 export function getNextPrayer(today: DailyPrayerTime) {
