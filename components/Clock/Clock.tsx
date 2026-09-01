@@ -4,19 +4,14 @@ import { useEffect, useState } from "react"
 import { dtNowLocaleFormatTime12hAmPm } from "@/lib/datetimeUtils"
 
 export default function Clock({ darkMode = false }: { darkMode?: boolean }) {
-  const [time, setTime] = useState(getCurrentTimeFormatted())
+  const [time, setTime] = useState<string | null>(null)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(getCurrentTimeFormatted())
-    }, 1000)
-
+    const updateTime = () => setTime(dtNowLocaleFormatTime12hAmPm())
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
     return () => clearInterval(interval)
   }, [])
-
-  function getCurrentTimeFormatted() {
-    return dtNowLocaleFormatTime12hAmPm()
-  }
 
   return (
     <div
@@ -28,7 +23,7 @@ export default function Clock({ darkMode = false }: { darkMode?: boolean }) {
           !darkMode ? "text-mosqueBrand-onPrimary" : "text-gray-500"
         }`}
       >
-        {time}
+        {time ?? "--:-- --"}
       </time>
     </div>
   )
