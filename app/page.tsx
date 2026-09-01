@@ -1,9 +1,11 @@
 import Blackout from "@/components/Blackout/Blackout"
 import Clock from "@/components/Clock/Clock"
+import DailyRefresh from "@/components/DailyRefresh/DailyRefresh"
 import Date from "@/components/Date/Date"
 import MosqueMetadata from "@/components/MosqueMetadata/MosqueMetadata"
 import PrayerDisplay from "@/components/PrayerDisplay/PrayerDisplay"
 import ServiceWorker from "@/components/ServiceWorker/ServiceWorker"
+import { dtNowLocale } from "@/lib/datetimeUtils"
 import {
   getJummahTimes,
   getMetaData,
@@ -38,6 +40,7 @@ export default async function Home() {
     await getMetaData(),
   )
   const config: ConfigurationJson = await getConfiguration()
+  const loadedDate = dtNowLocale().format("YYYY-MM-DD")
 
   return (
     <ConfigurationProvider config={config}>
@@ -60,6 +63,7 @@ export default async function Home() {
           announcementEnabled={config.feature.announcement.enabled}
         />
         <ServiceWorker />
+        <DailyRefresh loadedDate={loadedDate} />
         <Blackout prayerTimeToday={today} jummahTimes={jummahTimes} />
       </div>
     </ConfigurationProvider>
