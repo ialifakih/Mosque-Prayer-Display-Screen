@@ -60,7 +60,7 @@ export default async function Home() {
           announcementEnabled={config.feature.announcement.enabled}
         />
         <ServiceWorker />
-        <Blackout prayerTimeToday={today} />
+        <Blackout prayerTimeToday={today} jummahTimes={jummahTimes} />
       </div>
     </ConfigurationProvider>
   )
