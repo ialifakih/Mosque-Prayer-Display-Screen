@@ -36,6 +36,196 @@ body {
   .prayer-display-content {
     grid-template-rows: minmax(0, 1fr) 24%;
   }
+
+  /* Final pilot pass: make the three lower cards feel like mosque signage,
+     not generic dashboard widgets. The main prayer layout stays untouched. */
+  .jummah-card,
+  .announcement-panel,
+  .hadith-card {
+    border-color: rgba(184, 138, 58, 0.76);
+    border-radius: 0.72rem;
+    background:
+      linear-gradient(180deg, rgba(255, 252, 245, 0.99), rgba(251, 244, 230, 0.99));
+    box-shadow:
+      0 4px 14px rgba(15, 50, 38, 0.07),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.64);
+  }
+
+  .jummah-card::before {
+    inset: 0.42rem;
+    border-color: rgba(184, 138, 58, 0.18);
+    border-radius: 0.48rem;
+  }
+
+  .jummah-art {
+    border-right-color: rgba(184, 138, 58, 0.28);
+    background:
+      radial-gradient(circle at 50% 108%, rgba(13, 90, 59, 0.09), transparent 56%);
+  }
+
+  .jummah-dome {
+    left: 0.78rem;
+    bottom: 0.58rem;
+    width: 4.3rem;
+    height: 2.7rem;
+    border-radius: 4.3rem 4.3rem 0.12rem 0.12rem;
+  }
+
+  .jummah-minaret {
+    left: 4.82rem;
+    bottom: 0.58rem;
+    height: 4.9rem;
+  }
+
+  .jummah-copy {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.75rem;
+  }
+
+  .jummah-title {
+    margin: 0 0 0.36rem;
+    padding: 0.3rem 0.78rem;
+    border: 1px solid rgba(184, 138, 58, 0.58);
+    border-radius: 999px;
+    color: #fff8e9;
+    background: linear-gradient(90deg, #063d2a, #0d5a3b, #063d2a);
+    font-size: clamp(0.76rem, 0.9vw, 1rem);
+    letter-spacing: 0.07em;
+  }
+
+  .jummah-title::after {
+    display: none;
+  }
+
+  .jummah-copy time {
+    display: inline-block;
+    min-width: 64%;
+    margin: 0;
+    padding: 0.22rem 0.72rem 0.28rem;
+    border: 1px solid rgba(184, 138, 58, 0.6);
+    border-radius: 0.55rem;
+    color: #fff8e9;
+    background: #063d2a;
+    font-size: clamp(2.1rem, 2.65vw, 3rem);
+    line-height: 1;
+  }
+
+  .jummah-copy small {
+    margin-top: 0.34rem;
+    color: #174132;
+    font-size: clamp(0.6rem, 0.72vw, 0.8rem);
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .announcement-panel,
+  .hadith-card {
+    padding: clamp(0.7rem, 1vh, 0.9rem) clamp(0.9rem, 1.3vw, 1.25rem);
+  }
+
+  .announcement-panel::after,
+  .hadith-card::after {
+    right: -0.25rem;
+    bottom: -0.25rem;
+    width: 6.6rem;
+    height: 6.6rem;
+    opacity: 0.2;
+    background:
+      url('/zanzibar-edge-arches.svg') right bottom / 5.8rem 6.6rem no-repeat;
+  }
+
+  .announcement-heading,
+  .hadith-heading {
+    min-height: 0;
+    gap: 0;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .announcement-icon,
+  .hadith-book {
+    width: 2rem;
+    height: 2rem;
+    border-color: rgba(184, 138, 58, 0.68);
+    border-radius: 0.62rem 0 0 0.62rem;
+    background: #063d2a;
+  }
+
+  .announcement-heading h2,
+  .hadith-heading > span:not(.hadith-book) {
+    margin: 0;
+    padding: 0.43rem 0.85rem 0.4rem;
+    border: 1px solid rgba(184, 138, 58, 0.68);
+    border-left: 0;
+    border-radius: 0 0.62rem 0.62rem 0;
+    color: #fff8e9;
+    background: linear-gradient(90deg, #0d5a3b, #063d2a);
+    font-size: clamp(0.86rem, 1vw, 1.1rem);
+    line-height: 1;
+    letter-spacing: 0.08em;
+  }
+
+  .hadith-heading small {
+    margin-left: auto;
+    color: #60491f;
+    font-size: clamp(0.62rem, 0.75vw, 0.85rem);
+  }
+
+  .announcement-space {
+    align-items: center;
+    padding-top: 0.42rem;
+  }
+
+  .announcement-space .announcement-rotator h3 {
+    color: #102f23;
+    font-size: clamp(1.38rem, 1.72vw, 2rem);
+    line-height: 1.02;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+
+  .announcement-space .announcement-rotator p:not(.announcement-position) {
+    margin-top: 0.42rem;
+    color: #273f35;
+    font-size: clamp(0.82rem, 1vw, 1.08rem);
+    line-height: 1.34;
+  }
+
+  .announcement-position {
+    color: #725727;
+  }
+
+  .hadith-card blockquote {
+    padding: 0.18rem 0.5rem 0;
+  }
+
+  .hadith-arabic {
+    color: #0c3324;
+    font-size: clamp(1.65rem, 2.15vw, 2.55rem);
+    line-height: 1.34;
+  }
+
+  .hadith-swahili {
+    margin-top: 0.4rem;
+    color: #2a4037;
+    font-size: clamp(0.82rem, 1vw, 1.08rem);
+    line-height: 1.32;
+  }
+
+  .hadith-source {
+    margin-top: 0.22rem;
+    padding: 0.28rem 0.78rem;
+    border-color: rgba(184, 138, 58, 0.72);
+    border-radius: 999px;
+    background: #063d2a;
+    font-size: clamp(0.58rem, 0.68vw, 0.76rem);
+    letter-spacing: 0.08em;
+  }
 }
 
 @media (min-width: 768px) and (max-height: 820px) {
@@ -80,8 +270,43 @@ body {
 
   .announcement-panel,
   .hadith-card {
-    padding-top: 0.65rem;
-    padding-bottom: 0.65rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .announcement-icon,
+  .hadith-book {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  .announcement-heading h2,
+  .hadith-heading > span:not(.hadith-book) {
+    padding-top: 0.32rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .announcement-space .announcement-rotator h3 {
+    font-size: clamp(1.18rem, 1.5vw, 1.6rem);
+  }
+
+  .announcement-space .announcement-rotator p:not(.announcement-position),
+  .hadith-swahili {
+    font-size: clamp(0.72rem, 0.88vw, 0.94rem);
+  }
+
+  .hadith-arabic {
+    font-size: clamp(1.35rem, 1.75vw, 1.9rem);
+  }
+
+  .jummah-title {
+    margin-bottom: 0.24rem;
+    padding-top: 0.22rem;
+    padding-bottom: 0.22rem;
+  }
+
+  .jummah-copy time {
+    font-size: clamp(1.75rem, 2.25vw, 2.45rem);
   }
 }
 
